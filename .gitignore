@@ -1,0 +1,30 @@
+# Node / Web
+node_modules/
+.dist/
+.next/
+build/
+
+# Python / API
+venv/
+.env
+*.pyc
+__pycache__/
+
+# Android / Mobile
+.gradle/
+.local/
+.idea/
+.vscode/
+*.iml
+/build/
+app/build/
+
+# Database
+*.sqlite
+*.db
+*.db-journal
+migrations/__pycache__/
+
+# OS & misc
+.DS_Store
+Thumbs.db
