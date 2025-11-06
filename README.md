@@ -36,6 +36,7 @@ This documentation also serves as a **reference** for BuffTeks developers. It’
 /backend    → Python API and server logic
 /database   → MySQL schema, migrations, and seed data
 /devops     → Docker setup, GitHub Actions, CI/CD scripts
+/SystemAnalysisDesign → System functional requirements and UML diagrams
 ```
 
 > Keep all documentation inside the respective folders. Avoid placing unrelated files in the root directory.
