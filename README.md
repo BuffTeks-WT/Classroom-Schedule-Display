@@ -219,7 +219,7 @@ git commit -m "feat(<team>): <what you did>" # e.g., feat(database): created db 
   git push
 ```
 ##### 5. Open a Pull Request (PR) in GitHub:
- * **Target branch:** Your team branch (e.g., `frontend`, `backend`, `database`, `devops`)
+ * **Base branch:** Your team branch (e.g., `frontend`, `backend`, `database`, `devops`)
  * **Title:** `<team>: <short task>` (example: `frontend: add schedule grid component`)
  * Description: **What / Why / How / Test steps**
    * **frontend**: include UI screenshots
