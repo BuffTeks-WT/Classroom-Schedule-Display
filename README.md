@@ -61,7 +61,17 @@ This documentation also serves as a **reference** for BuffTeks developers. It’
 
 ## 🚀 Getting Started (For Developers)
 
-### 1. Clone the repository
+Table of Contents:
+1. [Clone the repository](#clone-the-repository)
+2. [Setting up your team environment](#setting-up-your-team-environment)
+3. [Project Branching Strategy](#project-branching-strategy)
+4. [Create your contribution feature branch](#create-your-contribution-feature-branch)
+5. [Contribution Guidelines](#contribution-guidelines)
+6. [Best Practices](#best-practices)
+
+---
+
+### Clone the repository
 
 - Copy the repo URL from GitHub. Open folder where you want to store the project, then open a terminal, verify you are in the desired folder directory in terminal, and run:
 
@@ -71,25 +81,10 @@ cd classroom-schedule-display # changes directory to the project folder
 code .  # (for VS Code)
 ```
 
-### 2. Create your branch from `main`
+### Setting up your team environment
 
-
-Follow the naming convention:
-
-```bash
-<team>/<github-username>-<short-task> 
-```
-
-**Example:**
-
-```bash
-git checkout -b database/htorres-create-db-table
-```
-
-### 3. Run your respective environment
-
-**Frontend:** Open `index.html` directly or use VS Code Live Server.
-**Backend:**
+**Frontend:** use `index.html` to run the frontend in your browser.
+**Backend:** using Python app structure with Flask (update as needed)
 
 ```bash
 cd backend
@@ -97,7 +92,7 @@ pip install -r requirements.txt
 python app.py
 ```
 
-**Database:**
+**Database:** Set up connection to MySQL DB
 
 ```bash
 mysql -u root -p
@@ -106,7 +101,7 @@ USE <database_name>;
 SOURCE ./database/schema/<table_name>.sql; # example
 ```
 
-**DevOps:**
+**DevOps:** Build and run Docker container
 
 ```bash
 cd devops/docker
@@ -116,22 +111,65 @@ docker run -p 5000:5000 classroom-schedule-display
 
 ---
 
-## 🌱 Learning & Best Practices
+### Project Branching Strategy
 
-* **Commit small, clear changes.** Example: `feat(frontend): add schedule grid`
-* **Keep PRs short.** Reviewers should understand your work quickly.
-* **Document your work** inside your team folder’s README.
-* **Use .env files** for local secrets and never push credentials.
-* **Collaborate actively**—ask questions and share progress.
+Our project uses a **team-based branching workflow**:
 
-> 💡 *This project is a learning platform—focus on growth, teamwork, and clean code.*
+```github
+main (production)
+  └── develop (integration branch)
+      ├── frontend (team branch)
+      ├── backend (team branch)
+      ├── database (team branch)
+      └── devops (team branch)
+```
 
----
+**Workflow:**
+1. **develop** branch is created from `main` (integration branch)
+2. Each team has a contribution branch: `frontend`, `backend`, `database`, `devops`
+3. Team branches are created from the `develop` branch
+4. Developers should create feature branches from their team branch
+   examples: `dev-name/feature-description`
+    - from `frontend` branch, create your contribution branch
+      - `git checkout -b scrump/landing-page`
+    - from `backend` branch, create your contribution branch
+      - `git checkout -b xna285/api-endpoint`
+    - from `database` branch, create your contribution branch
+      - `git checkout -b htorres38/db-schema`
+    - from `devops` branch, create your contribution branch
+      - `git checkout -b kiettrinh7/docker-setup`
+5. Features merge into team branches → team branches merge into `develop` → `develop` merges into `main`
 
-## ✅ Ready for Contribution Guidelines
+### Create your contribution feature branch
 
+First, ensure your team branch is up-to-date with `develop`:
 
-### 1. Stage your changes:
+```bash
+# Step 1: Checkout develop branch
+git checkout develop
+
+# Step 2: Pull latest changes from remote develop
+git pull origin develop
+
+# Step 3: Switch back to your team branch
+git checkout <team-branch>  # e.g., git checkout frontend
+
+# Step 4: Merge develop changes into your local team branch to sync
+git merge develop
+
+# Step 5: Create your feature branch from your updated team branch
+git checkout -b <dev-name>/<short-task>  # e.g., git checkout -b frontend/ad1135773-add-schedule-grid
+```
+From here, you can start working on your feature! and when you are complete, move on to the next section on Contribution Guidelines.
+
+### Contribution Guidelines
+
+When you have completed a feature or made changes that are ready to be pushed, follow these steps: 
+  - Staging, committing, syncing, pushing, and creating a Pull Request (PR).
+
+> ⚠️ **Important:** Before proceeding, ensure you are on your **feature branch** (e.g., `dev-name/short-task`).'
+
+##### 1. Stage your changes: with one of the following commands:
 ```bash
 # if many files changed
 git add . # stages all changed files
@@ -142,66 +180,121 @@ git add <file1> <file2> # stages specific files
 # stage all changes
 git add -A
 ```
-### 2. Next commit in the following format:
+##### 2. Next commit in the following format:
 
-   ```bash
-    # For best practices, write clear commit messages!
-    # Conventional message format: type(scope): description
-   git commit -m "feat(<team>): <what you did>" # e.g., feat(database): created db and tables.
-   ```
-      - More Examples: `fix(backend): resolve database connection error`
+```bash
+# For best practices, write clear commit messages!
+# Conventional message format: type(scope): description
+git commit -m "feat(<team>): <what you did>" # e.g., feat(database): created db and tables.
+```
+- More Examples: `fix(backend): resolve database connection error`
 
-### 3. Before merging, **rebase with `main`** to prevent conflicts.
-     - Rebase your branch with main before pushing
-       ```bash
-       git checkout <team>/<developer>-<short-task> # switch to your branch
-       git rebase main # rebase your branch with latest main
-       # Resolve any conflicts if they arise, then continue rebase
-       git rebase --continue
-       ```
-### 4. Always **sync with `main`** before pushing:
-     - Pull latest and greatest from main before pushing
-       ```bash
-       git checkout main # switch to main branch
-       git pull origin main # pulls latest and greatest from main
-       git checkout <team>/<developer>-<short-task> # switch back to your branch
-       git merge main # merge your branch with main
-       ```
-    > 🫸 **Once all conflicts are resolved proceed to push your changes.**
+##### 3. Before pushing, **sync your feature branch with latest changes** to prevent conflicts.
+- Keep your feature branch up-to-date with your team branch and develop
+ ```bash
+ # Step 1: Update develop from remote
+ git checkout develop
+ git pull origin develop
+ 
+ # Step 2: Update your team branch with latest develop
+ git checkout <team> # switch to your team branch (e.g., frontend, backend)
+ git merge develop # merge latest develop into your team branch
+ 
+ # Step 3: Update your feature branch with latest team branch
+ git checkout <team>/<developer>-<short-task> # switch back to your feature branch
+ git rebase <team> # rebase your feature branch with latest team branch
+ 
+ # Resolve any conflicts if they arise, then continue rebase
+ git rebase --continue
+ ```
+> 🫸 **Once all conflicts are resolved proceed to push your changes.**
 
-### 5. Push your branch & set upstream:
-     - If this is your first push of the branch, set upstream
-       ```bash
-       git push -u origin <team>/<developer>-<short-task>
-       ```
-     - If branch already exists remotely, just push
-        ```bash
-          git push
-        ```
-### 6. Next open a Pull Request (PR) in GitHub:
-   * Target branch: `main`
-   * Title: `<team>: <short task>` (example: `database: created db and tables for Classroom Schedule`)
-   * Description: **What / Why / How / Test steps**
-     * **frontend**: include UI screenshots
-     * **backend**: include API test results
-     * **database**: include sample queries or ER diagrams
-     * **devops**: include deployment logs or workflow screenshots
-     * Screenshots or test notes if applicable
-### 7. Update your **team README** with new files, changes, or diagrams.
+##### 4. Push your branch & set upstream:
+- If this is your first push of the branch, set upstream
+ ```bash
+ git push -u origin <team>/<developer>-<short-task>
+ ```
+- If branch already exists remotely, just push
+```bash
+  git push
+```
+##### 5. Open a Pull Request (PR) in GitHub:
+ * **Target branch:** Your team branch (e.g., `frontend`, `backend`, `database`, `devops`)
+ * **Title:** `<team>: <short task>` (example: `frontend: add schedule grid component`)
+ * Description: **What / Why / How / Test steps**
+   * **frontend**: include UI screenshots
+   * **backend**: include API test results
+   * **database**: include sample queries or ER diagrams
+   * **devops**: include deployment logs or workflow screenshots
+   * Screenshots or test notes if applicable
+##### 6. After your feature is merged to your team branch:
+ * Team leads will merge team branches into `develop` when ready
+ * After testing on `develop`, it will be merged to `main` for production
+ * Only `develop` merges into `main` (team branches never merge directly to `main`)
+
+##### 7. Update your **team README** with new files, changes, or diagrams.
 
 ---
 
-### Key Notes:
-- Always rebase your branch with main before pushing.
-- Pull latest changes from main and merge them with your branch before opening a PR.
-- Include diagrams/screenshots for documentation where applicable.
+### Best Practices
+
+#### Keeping Your Team Branch Up-to-Date
+
+**Why this matters:** When other teams merge their work into `develop`, you want those changes in your team branch so you're working with the latest codebase.
+
+#### Regular Sync Workflow (Recommended Daily/Before Starting New Work):
+
+```bash
+# Step 1: Checkout develop (the branch you want to pull FROM)
+git checkout develop
+
+# Step 2: Pull latest changes from remote develop
+git pull origin develop
+
+# Step 3: Switch back to your team branch
+git checkout <team>  # e.g., git checkout frontend
+
+# Step 4: Merge develop into your team branch
+git merge develop
+```
+
+#### Learning and Best Practices 
+
+* **Commit small, clear changes.** Example: `feat(frontend): add schedule grid`
+* **Keep PRs short.** Reviewers should understand your work quickly.
+* **Document your work** inside your team folder’s README.
+* **Use .env files** for local secrets and never push credentials.
+* **Collaborate actively**—ask questions and share progress.
+
+> 💡 *This project is a learning platform—focus on growth, teamwork, and clean code.*
+
+**Why this approach?**
+- ✅ Ensures you get the absolute latest from remote `develop`
+- ✅ Follows the pattern: checkout source → pull → checkout target → merge
+- ✅ Keeps your team branch synchronized with integration branch
+- ✅ Prevents conflicts when creating new feature branches
+
+**When to do this:**
+- Before creating a new feature branch
+- Daily, if working on the project regularly
+- Before starting a new work session
+- When you know other teams have merged to `develop`
+
+---
+
+#### Key Notes:
+- **Branching Strategy:** Feature branches → Team branches → `develop` → `main`
+- Always sync your feature branch with your team branch and `develop` before pushing.
+- Create feature branches from your team branch, not from `main` or `develop`.
+- PRs target your team branch (e.g., `frontend`, `backend`), not `main`.
+- Only `develop` merges into `main` (team branches merge into `develop`).
 - Use clear, conventional commit messages.
 - Follow the PR checklist below before submitting.
 - Never commit secrets (API keys, service accounts). Use `.env` files.  
   - Do not forget to verify/add `.env` to `.gitignore`!
 - Reach out to the Tech Lead if you hit any blockers!
 
-### Commit Message Guide (short & useful)
+#### Commit Message Guide (short & useful)
 
 Use Conventional Commits:
   * `feat`: new feature

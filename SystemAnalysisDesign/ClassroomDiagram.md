@@ -245,7 +245,7 @@ Using Gitflow branching diagram to help visualize the development workflow for t
 
 ```mermaid
 ---
-title: Gitflow Diagram
+title: Gitflow Diagram with example branches
 config:
     theme: forest
 ---
@@ -255,29 +255,49 @@ gitGraph
     checkout develop
     commit id: "Setup project structure"
     
-    branch frontend/feature/ui
-    checkout frontend/feature/ui
-    commit id: "Implement UI components"
+    branch frontend
+    checkout frontend
+    commit id: "Initialize frontend commit"
+    branch scrump/landing-page %% format: dev-name/feature-description
+    checkout scrump/landing-page
+    commit id: "feat(frontend): describe feature work" %% commit example: "git commit -m 'feat(frontend): ui implemented for landing page"
+    checkout frontend
+    merge scrump/landing-page id: "Merge feature to frontend"
     checkout develop
-    merge frontend/feature/ui id: "Merge UI feature"
+    merge frontend id: "Merge frontend to develop"
 
-    branch backend/feature/api
-    checkout backend/feature/api
-    commit id: "Develop API endpoints"
+    branch backend
+    checkout backend
+    commit id: "Initialize backend branch"
+    branch xna285/api-endpoint %% format: dev-name/feature-description
+    checkout xna285/api-endpoint
+    commit id: "feat(backend): describe feature work" %% commit example: "git commit -m 'feat(backend): develop API endpoints"
+    checkout backend
+    merge xna285/api-endpoint id: "Merge API feature to backend"
     checkout develop
-    merge backend/feature/api id: "Merge API feature"
+    merge backend id: "Merge backend to develop"
 
-    branch database/feature/schema
-    checkout database/feature/schema
-    commit id: "Design database schema"
+    branch database
+    checkout database
+    commit id: "Initialize database branch"
+    branch htorres/design-schema %% format: dev-name/feature-description
+    checkout htorres/design-schema
+    commit id: "feat(database): describe feature work" %% commit example: "git commit -m 'feat(database): design database schema"
+    checkout database
+    merge htorres/design-schema id: "Merge DB schema to database"   
     checkout develop
-    merge database/feature/schema id: "Merge DB schema feature"
+    merge database id: "Merge database to develop"
 
-    branch devops/feature/deployment
-    checkout devops/feature/deployment
-    commit id: "Setup CI/CD pipeline"
+    branch devops
+    checkout devops
+    commit id: "Initialize devops branch"
+    branch kiettrinh/docker-setup %% format: dev-name/feature-description
+    checkout kiettrinh/docker-setup
+    commit id: "feat(devops): describe feature work" %% commit example: "git commit -m 'feat(devops): setup docker configuration"
+    checkout devops
+    merge kiettrinh/docker-setup id: "Merge Docker setup to devops"
     checkout develop
-    merge devops/feature/deployment id: "Merge DevOps feature"
+    merge devops id: "Merge devops to develop"
 
     checkout main
     merge develop id: "Release to main" tag: "v1.0.0"
@@ -285,8 +305,17 @@ gitGraph
 ```
 
 **Explanation:**
-- Visualizes the Gitflow branching strategy for collaborative development.
-- Highlights feature branches for frontend, backend, database, and DevOps tasks.
+- **main**: Production branch (stable releases only)
+- **develop**: Integration branch created from `main` - all team work integrates here
+- **Team branches** (`frontend`, `backend`, `database`, `devops`): Persistent branches created from `develop` - each team works on their respective branch
+- **Feature branches**: Created from team branches (e.g., `dev-name/feature-description`) - individual features are developed here
+- **Workflow**: Feature branches → Team branches → `develop` → `main`
+---
 
+## 🧩 Final Notes
+
+This project is meant to continue production. Treat this repository as a **training ground** for professional collaboration, version control, and multi‑role teamwork.
+Keep experimenting, documenting, and helping each other learn. code small, test often, and contribute regularly.
 
 > 🦬 *BuffTeks Development Team — Designing clarity, structure, and flow for every classroom.*
+>          “Let’s build it right, keep it simple, and ship it together.”  — BuffTeks Team 🚀
