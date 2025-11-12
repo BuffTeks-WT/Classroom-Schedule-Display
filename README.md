@@ -201,8 +201,8 @@ git commit -m "feat(<team>): <what you did>" # e.g., feat(database): created db 
  git merge develop # merge latest develop into your team branch
  
  # Step 3: Update your feature branch with latest team branch
- git checkout <team>/<developer>-<short-task> # switch back to your feature branch
- git rebase <team> # rebase your feature branch with latest team branch
+ git checkout <dev-name>-<short-task> # switch back to your feature branch
+ git rebase team # rebase your feature branch with latest team branch
  
  # Resolve any conflicts if they arise, then continue rebase
  git rebase --continue
@@ -212,7 +212,7 @@ git commit -m "feat(<team>): <what you did>" # e.g., feat(database): created db 
 ##### 4. Push your branch & set upstream:
 - If this is your first push of the branch, set upstream
  ```bash
- git push -u origin <team>/<developer>-<short-task>
+ git push -u origin <dev-name>/<short-task> # e.g., git push -u origin scrump/landing-page
  ```
 - If branch already exists remotely, just push
 ```bash
