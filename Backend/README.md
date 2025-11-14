@@ -92,3 +92,4 @@ Use this section to record:
 | Xander Galusha | [@Xna285](https://github.com/Xna285)                     | Backend Lead Developer |
 
 > 💻 *Huge thanks to the Backend team for implementing the core functionality and ensuring smooth communication with the database!*
+

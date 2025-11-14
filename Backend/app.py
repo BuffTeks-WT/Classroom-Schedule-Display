@@ -11,6 +11,8 @@ app = FastAPI()
 async def root():
     return None
 
+    #For this function, we can return HTML
+
 #To run this server
 #1. Verify your terminal is currently referencing this file path (use cd .\Backend\main.py if not).
 #2. Run this command:
