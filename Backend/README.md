@@ -9,9 +9,10 @@ This folder contains the **Python backend** for the Classroom Schedule Display p
 | Technology          | Purpose                                    |
 | ------------------- | ------------------------------------------ |
 | **Python 3.11+**    | Core programming language                  |
-| **Flask**           | Web framework for API routing and requests |
+| **FastAPI**         | Modern web framework for API routing       |
+| **Uvicorn**         | ASGI server for running FastAPI            |
 | **MySQL Connector** | Connects backend to MySQL database         |
-| **dotenv**          | Loads environment variables from `.env`    |
+| **python-dotenv**   | Loads environment variables from `.env`    |
 
 ---
 
@@ -20,13 +21,11 @@ This folder contains the **Python backend** for the Classroom Schedule Display p
 ```example
 /backend
 │
-├── app.py              → Main entry point
-├── requirements.txt   → Python dependencies
-├── README.md           → This document provides an overview and setup instructions
-├── /routes             → API endpoints (Flask/FastAPI routes)
-├── /models             → Data models and schemas
-├── /services           → Business logic and utility functions
-└── /config             → Database and environment configuration
+├── main.py             → Main entry point (FastAPI application)
+├── database.py         → Database connection and query logic
+├── requirements.txt    → Python dependencies
+├── Dockerfile          → Docker configuration for containerization
+└── README.md           → This document
 ```
 
 Keep the backend modular, separating logic for clarity and maintainability.
@@ -54,33 +53,51 @@ Keep the backend modular, separating logic for clarity and maintainability.
    pip install -r requirements.txt
    ```
 
-3. Create a `.env` file and include database credentials:
+3. Create a `.env` file with database credentials:
 
    ```bash
-   DB_HOST=localhost
-   DB_USER=root
-   DB_PASSWORD=yourpassword
-   DB_NAME=classroom_display
+   host=localhost
+   port=####
+   usernameDB=root
+   password=yourpassword
+   database=your_db_name
    ```
-    > ⚠️ Don’t commit actual credentials — just show placeholders.
 
 4. Run the server:
 
-   ```bash example
-   python app.py
+   ```bash
+   uvicorn main:app --reload
    ```
 
-   The API should run on `http://127.0.0.1:5000` by default.
+   The API will run on `http://127.0.0.1:8000` by default.
+   - `--reload` enables auto-restart on code changes (development only)
 
 ---
 
-## 📖 Documentation & Notes
+## � Docker Setup
 
-Use this section to record:
+To run the backend in a Docker container:
 
-* API endpoints and request examples.
-* Connection notes or changes to database config.
-* Any known issues or improvements.
+```bash
+docker build -t <docker-image-name> .
+docker run -p 8000:8000 --env-file .env <docker-image-name>
+```
+
+The container will expose the API on `http://localhost:8000`.
+
+---
+
+## 📡 API Endpoints
+
+| Endpoint           | Method | Description                    |
+| ------------------ | ------ | ------------------------------ |
+| `/reservations`    | GET    | Fetch all classroom reservations |
+
+---
+
+## 📖 Database Connection
+
+The backend connects to MySQL using the `Database` class in `database.py`. Ensure all environment variables in `.env` are set correctly before running the application.
 
 ---
 
