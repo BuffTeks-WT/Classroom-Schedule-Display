@@ -21,7 +21,7 @@ This documentation also serves as a **reference** for BuffTeks developers. It’
 | Layer    | Technology                | Purpose                                               |
 | -------- | ------------------------- | ----------------------------------------------------- |
 | Frontend | **HTML, CSS, JavaScript** | Build responsive and interactive room displays        |
-| Backend  | **Python (Flask)**        | Manage API logic and serve classroom data             |
+| Backend  | **Python (FastAPI)**      | Manage API logic and serve classroom data             |
 | Database | **MySQL**                 | Store and retrieve classroom and reservation data     |
 | DevOps   | **Git, GitHub, Docker**   | Handle collaboration, version control, and deployment |
 
@@ -84,12 +84,12 @@ code .  # (for VS Code)
 ### Setting up your team environment
 
 **Frontend:** use `index.html` to run the frontend in your browser.
-**Backend:** using Python app structure with Flask (update as needed)
+**Backend:** using Python with FastAPI
 
 ```bash
 cd backend
 pip install -r requirements.txt
-python app.py
+uvicorn main:app --reload
 ```
 
 **Database:** Set up connection to MySQL DB
@@ -316,3 +316,4 @@ This project is meant to continue production. Treat this repository as a **train
 Keep experimenting, documenting, and helping each other learn.
 
 > “Let’s build it right, keep it simple, and ship it together.”  — BuffTeks Team 🚀
+This is benny, testing push notifications 
