@@ -1,4 +1,5 @@
-body{
+/* CSS for Landing page: Lines 2-40. */
+.home{
     background-image: url('Images/Background.png');
     background-size: 100%;
     background-repeat: no-repeat;
@@ -38,3 +39,9 @@ input[type="button"] {
     vertical-align: middle;
 }
 
+/* CSS for Reservation page: Lines 43-... */
+.reserve{
+    background-color: #450012;
+    background-size: 100%;
+    background-repeat: no-repeat;
+}
