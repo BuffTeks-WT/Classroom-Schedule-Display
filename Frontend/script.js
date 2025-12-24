@@ -1,3 +1,4 @@
+// Home page JavaScript code start
 function makeAReservation() {
     window.location.href = "reservation.html";
 }
@@ -9,4 +10,7 @@ function viewSchedule() {
 function goHome(){
     window.location.href = "index.html";
 }
+// Home page JavaScript code end
+
+// Reservation page JavaScript code start
 
