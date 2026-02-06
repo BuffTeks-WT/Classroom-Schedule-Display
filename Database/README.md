@@ -23,6 +23,7 @@ This folder contains all **MySQL database resources** for the Classroom Schedule
 ├── /schema       → SQL scripts for creating db, tables, relationships, etc.
 ├── /procedures   → Stored procedures and functions
 └── /seed         → Initial data population scripts
+└── /queries      → Validation and Example queries
 ```
 Why save your SQL scripts? 🤔⁉️ 
 
@@ -57,6 +58,13 @@ Why save your SQL scripts? 🤔⁉️
 
 2. Navigate through the `database` folder to find tables and procedures to test and run.
 
+## ▶️ Recommended Run Order
+
+1. Run all scripts in the `schema/` folder to create database tables.
+2. Run all scripts in the `seeds/` folder to insert initial data.
+3. Run scripts in the `procedures/` folder to create stored procedures.
+4. (Optional) Run scripts in the `queries/` folder to verify data and joins.
+
 ---
 
 ## 📖 Documentation & Notes
@@ -67,6 +75,28 @@ Use this section to describe:
 * Table structures and relationships
 * Stored procedures and their purposes
 * New indexes, keys, or constraints
+
+### Stored Procedures
+The `procedures/` folder contains MySQL stored procedures that handle common
+reservation actions directly in the database. These procedures help keep
+logic consistent and reduce repeated SQL in the application.
+
+- **sp_insert_reservation** – adds a new reservation and its related data  
+- **sp_edit_reservation** – updates an existing reservation when details change  
+- **sp_delete_reservation** – removes a reservation from the system  
+- **sp_get_reservation** – retrieves reservation details using related tables  
+
+### Table Structure
+The database is built around a small set of core tables that represent how
+classrooms are scheduled.
+
+- **room** stores classroom and location information  
+- **host** stores faculty or student host details  
+- **event** stores event information such as title, time, and requirements  
+- **reservation** connects rooms, hosts, and events into a single booking  
+
+Foreign key relationships are used so that reservations always reference valid
+rooms, hosts, and events.
 
 ---
 
