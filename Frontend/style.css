@@ -1,0 +1,40 @@
+body{
+    background-image: url('Images/Background.png');
+    background-size: 100%;
+    background-repeat: no-repeat;
+    
+}
+h1{
+    color: #ffffff;
+    text-align: center;
+    font-family: 'Arial', sans-serif;
+    font-size: 60px;
+}
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 800px;
+}
+.div1 {
+    height: 500px;
+}
+input[type="button"] {
+    background-color: #450012;
+    border: none;
+    color: white;
+    padding: 30px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 20px;
+    cursor: pointer;
+    border-radius: 12px;
+    display: inline-block;
+    margin: 0px 50px;
+}
+.container {
+    text-align: center;
+    vertical-align: middle;
+}
+

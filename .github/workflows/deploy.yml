@@ -1,0 +1,43 @@
+name: Deploy Backend to Server
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'Backend/**'
+  workflow_dispatch:  # Manual trigger
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Deploy to Server via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          password: ${{ secrets.SERVER_PASSWORD }}
+          script: |
+            # Navigate to project directory (create if first time)
+            cd ~/classroom-schedule-display || git clone https://github.com/BuffTeks-WT/Classroom-Schedule-Display.git ~/classroom-schedule-display && cd ~/classroom-schedule-display
+            
+            # Pull latest changes
+            git pull origin ${{ github.ref_name }}
+            
+            # Stop existing container if running
+            docker stop classroom-api 2>/dev/null || true
+            docker rm classroom-api 2>/dev/null || true
+            
+            # Build and run new container
+            cd Backend
+            docker build -t classroom-backend .
+            docker run -d -p 8000:8000 --env-file .env --name classroom-api --restart unless-stopped classroom-backend
+            
+            # Verify deployment
+            sleep 5
+            curl -f http://localhost:8000/reservations || exit 1
+            echo "Deployment successful!"

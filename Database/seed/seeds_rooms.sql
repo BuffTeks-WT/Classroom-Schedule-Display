@@ -1,0 +1,16 @@
+INSERT INTO room (number, building, capacity, equipment, status) VALUES
+('101', 'Classroom Center', 30, 'Projector, Whiteboard', 'available'),
+('102', 'Classroom Center', 28, 'Projector', 'reserved'),
+('103', 'Classroom Center', 22, 'Whiteboard', 'available'),
+('210', 'Classroom Center', 35, 'Projector', 'available'),
+('214', 'Interactive Learning Center', 40, 'SmartBoard', 'available'),
+('305', 'Interactive Learning Center', 25, 'SmartBoard, Microphone', 'maintenance'),
+('320', 'Interactive Learning Center', 30, 'Projector, Speakers', 'available'),
+('302', 'Agriculture Sciences Complex', 20, 'Lab Tables, Computers', 'available'),
+('303', 'Agriculture Sciences Complex', 18, 'Lab Tables', 'maintenance'),
+('118', 'Jack B. Kelley Student Center', 100, 'Stage, Mics, Projector', 'available'),
+('120', 'Jack B. Kelley Student Center', 80, 'Projector, Speakers', 'reserved'),
+('105', 'Mary Moody Northen Hall', 30, 'Sound System', 'reserved'),
+('106', 'Mary Moody Northen Hall', 28, 'Projector', 'available'),
+('304', 'Buff Business Center', 55, 'Dual Screens, Speakers', 'available'),
+('201', 'Engineering & Computer Science Building', 28, 'Computers, Projector', 'maintenance');
