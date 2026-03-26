@@ -1,10 +1,12 @@
 # This Python script handles the API server using FastAPI.
 
+import time
+from contextlib import asynccontextmanager
 from fastapi import FastAPI, Query, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from typing import Optional, List
 from datetime import datetime
-from database import Database, DatabaseError
+from Database import Database, DatabaseError
 from models import ReservationCreate, ReservationUpdate, ReservationResponse
 import os
 import logging
@@ -27,13 +29,12 @@ user_name = os.getenv('usernameDB')
 password = os.getenv('password')
 database = os.getenv('database')
 
-from contextlib import asynccontextmanager
-import time
 
 # ... (imports remain) ...
 
 # Initialize database object (connection happens in lifespan)
 current_database = Database(host, port, user_name, password, database)
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -44,22 +45,25 @@ async def lifespan(app: FastAPI):
     # Startup: Connect to DB
     max_retries = 10
     retry_interval = 5  # seconds
-    
+
     for attempt in range(1, max_retries + 1):
         try:
-            logger.info(f"Connecting to database (Attempt {attempt}/{max_retries})...")
+            logger.info(
+                f"Connecting to database (Attempt {attempt}/{max_retries})...")
             current_database.connect()
             logger.info("Database connection established.")
             break
         except DatabaseError as e:
             if attempt == max_retries:
-                logger.critical(f"Could not connect to database after {max_retries} attempts. Exiting.")
+                logger.critical(
+                    f"Could not connect to database after {max_retries} attempts. Exiting.")
                 raise e
-            logger.warning(f"Connection failed: {e}. Retrying in {retry_interval}s...")
+            logger.warning(
+                f"Connection failed: {e}. Retrying in {retry_interval}s...")
             time.sleep(retry_interval)
-            
+
     yield
-    
+
     # Shutdown: (Optional) Close pool if needed, though usually handled by process exit
     logger.info("Shutting down...")
 
