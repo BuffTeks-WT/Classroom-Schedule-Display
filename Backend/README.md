@@ -1,111 +1,139 @@
 # ⚙️ Backend
 
-This folder contains the **Python backend** for the Classroom Schedule Display project. It handles the business logic, data processing, and API communication between the frontend and the MySQL database.
+This folder contains the **Python backend** for the Classroom Schedule Display project. It handles business logic, data validation, and API communication between the frontend and the MySQL database.
+
+---
+
+## 👥 Developed by:
+
+| Name           | GitHub                                                   | Role                   |
+| -------------- | -------------------------------------------------------- | ---------------------- |
+| Xander Galusha | [@Xna285](https://github.com/Xna285)                     | Backend Lead Developer |
 
 ---
 
 ## 📚 Tech Stack
 
-| Technology          | Purpose                                    |
-| ------------------- | ------------------------------------------ |
-| **Python 3.11+**    | Core programming language                  |
-| **FastAPI**         | Modern web framework for API routing       |
-| **Uvicorn**         | ASGI server for running FastAPI            |
-| **MySQL Connector** | Connects backend to MySQL database         |
-| **python-dotenv**   | Loads environment variables from `.env`    |
+| Technology          | Purpose                                        |
+| ------------------- | ---------------------------------------------- |
+| **Python 3.11+**    | Core programming language                      |
+| **FastAPI**         | High-performance web framework for API routing |
+| **Uvicorn**         | ASGI server for running FastAPI                |
+| **MySQL Connector** | Database connection with **Connection Pooling**|
+| **Pydantic**        | Data validation and serialization schemas      |
+| **python-dotenv**   | Loads environment variables from `.env`        |
 
 ---
 
 ## 🗂️ File Structure
 
-```example
-/backend
+```text
+/Backend
 │
-├── main.py             → Main entry point (FastAPI application)
-├── database.py         → Database connection and query logic
+├── main.py             → Entry point (FastAPI application & Endpoints)
+├── database.py         → Database class (Connection Pooling & Stored Procs)
+├── models.py           → Pydantic models for Request/Response validation
+├── test_db.py          → Script to verify database connection & logic
 ├── requirements.txt    → Python dependencies
-├── Dockerfile          → Docker configuration for containerization
-└── README.md           → This document
+├── Dockerfile          → Docker configuration
+├── .dockerignore       → Docker build exclusion rules
+└── README.md           → Documentation
 ```
-
-Keep the backend modular, separating logic for clarity and maintainability.
 
 ---
 
 ## ▶️ Installation & Run Guide
 
-### 🧩 Requirements
-
+### 1. Prerequisites
 * Python 3.11 or later
-* pip (Python package installer)
+* MySQL Database (with Stored Procedures installed)
 
-### 🚀 Steps
+### 2. Setup
 
-1. Navigate to the backend folder:
+Navigate to the backend folder:
+```bash
+cd Backend
+```
 
-   ```bash
-   cd classroom-schedule-display/backend
-   ```
-   
-2. Install dependencies:
+Install dependencies:
+```bash
+pip install -r requirements.txt
+```
 
-   ```bash
-   pip install -r requirements.txt
-   ```
+### 3. Configuration
+Create a `.env` file in the `Backend` directory with your database credentials:
 
-3. Create a `.env` file with database credentials:
+```ini
+host=localhost_name
+port=port_number
+usernameDB=root_name
+password=your_password
+database=your_db_name
+ALLOWED_ORIGINS=http://localhost:5500,http://127.0.0.1:5500
+```
 
-   ```bash
-   host=localhost
-   port=####
-   usernameDB=root
-   password=yourpassword
-   database=your_db_name
-   ```
-
-4. Run the server:
-
-   ```bash
-   uvicorn main:app --reload
-   ```
-
-   The API will run on `http://127.0.0.1:8000` by default.
-   - `--reload` enables auto-restart on code changes (development only)
+### 4. Run Server
+Start the development server with auto-reload:
+```bash
+uvicorn main:app --reload
+```
+The API will be available at [`http://127.0.0.1:8000`](http://127.0.0.1:8000).
 
 ---
 
-## � Docker Setup
+## 🧪 Verification & Testing
 
-To run the backend in a Docker container:
+To verify that all 4 CRUD (Create, Read, Update, Delete) operations are working seamlessly with the database:
+
+1. Ensure your `.env` file is properly configured with your active database credentials.
+2. Run the integration test script:
+   ```bash
+   python test_db.py
+   ```
+
+This script will sequentially **Create, Read, Update, and Delete** a test reservation to ensure the backend database connection and Stored Procedures are fully operational.
+
+### Troubleshooting
+-   **Connection Failed**: Verify your `.env` file matches your MySQL server credentials and the server is running.
+-   **Missing Tables/Routines**: Ensure the database is fully seeded with tables and Stored Procedures (Refer to the `Database/` directory).
+
+---
+
+## 🐳 Docker Setup
+
+Build and run the backend in a secure container:
 
 ```bash
-docker build -t <docker-image-name> .
-docker run -p 8000:8000 --env-file .env <docker-image-name>
-```
+# Build the image
+docker build -t classroom-backend .
 
-The container will expose the API on `http://localhost:8000`.
+# Run the container (mapping port 8000)
+docker run -p 8000:8000 --env-file .env classroom-backend
+```
 
 ---
 
 ## 📡 API Endpoints
 
-| Endpoint           | Method | Description                    |
-| ------------------ | ------ | ------------------------------ |
-| `/reservations`    | GET    | Fetch all classroom reservations |
+| Method | Endpoint                         | Description                                      |
+| :----- | :------------------------------- | :----------------------------------------------- |
+| `GET`  | `/reservations`                  | Fetch reservations (Supports optional filtering) |
+| `POST` | `/reservations`                  | Create a new reservation                         |
+| `PUT`  | `/reservations/{reservation_id}` | Update an existing reservation                   |
+| `DELETE`| `/reservations/{reservation_id}`| Delete a reservation                             |
+
+> **Note:** Access the interactive API documentation at `/docs` (Swagger UI) or `/redoc` when the server is running.
 
 ---
 
-## 📖 Database Connection
+## 📖 Database Architecture
 
-The backend connects to MySQL using the `Database` class in `database.py`. Ensure all environment variables in `.env` are set correctly before running the application.
+The backend utilizes a robust **Database** class in `database.py` featuring:
+
+*   **Connection Pooling:** Efficiently manages database connections using `mysql.connector.pooling`.
+*   **Stored Procedures:** All operations interact via Stored Procedures (`sp_get_reservations`, `sp_insert_reservation`, etc.) for security and performance.
+*   **Pydantic Models:** All incoming data is validated against strict schemas in `models.py` before processing.
 
 ---
-
-## 👥 Meet the Team
-
-| Name           | GitHub                                                   | Role              |
-| -------------- | -------------------------------------------------------- | ----------------- |
-| Victor         | [@victorwithcoding](https://github.com/victorwithcoding) | Backend Developer |
-| Xander Galusha | [@Xna285](https://github.com/Xna285)                     | Backend Lead Developer |
 
 > 💻 *Huge thanks to the Backend team for implementing the core functionality and ensuring smooth communication with the database!*
