@@ -1,0 +1,110 @@
+name: Docker Build & Test
+
+on:
+  pull_request:
+    branches: [main, develop, backend]
+    paths:
+      - 'Backend/**'
+      - 'Database/**'
+      - 'docker-compose.yml'
+  workflow_dispatch:
+
+jobs:
+  docker-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # ── Build & Start Containers ──────────────────────
+      - name: Create backend .env for CI
+        run: |
+          cat <<EOF > Backend/.env
+          host=db
+          port=3306
+          usernameDB=root
+          password=root_password
+          database=schedule_db
+          ALLOWED_ORIGINS=*
+          EOF
+
+      - name: Build and start Docker Compose
+        run: docker compose -f Backend/docker-compose.yml up -d --build
+
+      - name: Wait for MySQL to be healthy
+        run: |
+          echo "Waiting for MySQL health check..."
+          for i in $(seq 1 30); do
+            if docker compose -f Backend/docker-compose.yml exec -T db mysqladmin ping -h localhost --silent 2>/dev/null; then
+              echo "MySQL is ready!"
+              break
+            fi
+            echo "Attempt $i/30 — waiting 5s..."
+            sleep 5
+          done
+
+      # ── Seed the Database ─────────────────────────────
+      - name: Load schema, seeds, and stored procedures
+        run: |
+          DB_CONTAINER=$(docker compose -f Backend/docker-compose.yml ps -q db)
+
+          # Execute in order: schema → seeds → procedures
+          # Schema and seeds (no DELIMITER needed)
+          for f in create_room.sql create_host.sql create_event.sql create_reservation.sql; do
+            echo "Running schema/$f..."
+            docker exec -i $DB_CONTAINER mysql -u root -proot_password schedule_db < "Database/schema/$f"
+          done
+
+          for f in seeds_rooms.sql seeds_hosts.sql seeds_events.sql seeds_reservations.sql; do
+            echo "Running $f..."
+            docker exec -i $DB_CONTAINER mysql -u root -proot_password schedule_db < "Database/seed/$f"
+          done
+
+          # Stored procedures — inject DELIMITER wrapper at runtime
+          # (The SQL files don't have DELIMITER because MySQL Workbench doesn't need it.
+          #  The mysql CLI does, so we wrap it here without modifying the original files.)
+          for f in sp_get_reservation.sql sp_insert_reservation.sql sp_edit_reservation.sql sp_delete_reservation.sql; do
+            echo "Running procedures/$f..."
+            (echo "DELIMITER \$\$"; cat "Database/procedures/$f" | sed 's/^END$/END\$\$/'; echo ""; echo "DELIMITER ;") | docker exec -i $DB_CONTAINER mysql -u root -proot_password schedule_db
+          done
+
+      # ── Restart API to reconnect after seeding ────────
+      - name: Restart backend container
+        run: |
+          docker compose -f Backend/docker-compose.yml restart backend
+          sleep 10
+
+      # ── Verify API is Live ────────────────────────────
+      - name: Health check — GET /reservations
+        run: |
+          echo "Testing API endpoint..."
+          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8001/reservations)
+          if [ "$HTTP_CODE" -eq 200 ]; then
+            echo "✅ API returned HTTP $HTTP_CODE"
+          else
+            echo "❌ API returned HTTP $HTTP_CODE — expected 200"
+            docker compose -f Backend/docker-compose.yml logs backend
+            exit 1
+          fi
+
+      - name: Verify Swagger docs load
+        run: |
+          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8001/docs)
+          if [ "$HTTP_CODE" -eq 200 ]; then
+            echo "✅ Swagger UI returned HTTP $HTTP_CODE"
+          else
+            echo "❌ Swagger UI returned HTTP $HTTP_CODE"
+            exit 1
+          fi
+
+      # ── Run Integration Tests ─────────────────────────
+      - name: Run CRUD integration tests (test_db.py)
+        run: |
+          docker compose -f Backend/docker-compose.yml exec -T backend python test_db.py
+
+      # ── Cleanup ───────────────────────────────────────
+      - name: Tear down containers
+        if: always()
+        run: docker compose -f Backend/docker-compose.yml down -v

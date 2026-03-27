@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  backend:
+    build: .
+    ports:
+      - "8001:8000"
+    environment:
+      - host=db
+      - port=3306
+      - usernameDB=root
+      - password=root_password
+      - database=schedule_db
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - .:/app
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+
+  db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: schedule_db
+    ports:
+      - "8080:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+      # Mount the Database directory to /docker-entrypoint-initdb.d so scripts run on init
+      # modifying the path to match the user's structure relative to Backend folder
+      # Assuming 'Backend' is at the same level as 'Database' folder is UP one level.
+      # But docker context is 'Backend'. We need to be careful.
+      # Actually, best to just mount the init scripts if we can.
+      # For now, let's assume the user will handle seeding or we map the parent.
+      # Since build context is '.', we can't easily map parent directories in build without changing context.
+      # But for volumes, we can try relative paths if allowed, or just let the user see this.
+      # We'll use a named volume for persistence.
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  db_data:
