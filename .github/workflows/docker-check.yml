@@ -50,28 +50,25 @@ jobs:
         run: |
           DB_CONTAINER=$(docker compose -f Backend/docker-compose.yml ps -q db)
 
-          # Copy SQL files into the container
-          docker cp Database/schema/.   $DB_CONTAINER:/tmp/schema/
-          docker cp Database/seed/.     $DB_CONTAINER:/tmp/seed/
-          docker cp Database/procedures/. $DB_CONTAINER:/tmp/procedures/
-
           # Execute in order: schema → seeds → procedures
-          docker exec $DB_CONTAINER bash -c "
-            mysql -u root -proot_password schedule_db <<SQL
-              source /tmp/schema/create_room.sql;
-              source /tmp/schema/create_host.sql;
-              source /tmp/schema/create_event.sql;
-              source /tmp/schema/create_reservation.sql;
-              source /tmp/seed/seeds_rooms.sql;
-              source /tmp/seed/seeds_hosts.sql;
-              source /tmp/seed/seeds_events.sql;
-              source /tmp/seed/seeds_reservations.sql;
-              source /tmp/procedures/sp_get_reservation.sql;
-              source /tmp/procedures/sp_insert_reservation.sql;
-              source /tmp/procedures/sp_edit_reservation.sql;
-              source /tmp/procedures/sp_delete_reservation.sql;
-          SQL
-          "
+          # Schema and seeds (no DELIMITER needed)
+          for f in create_room.sql create_host.sql create_event.sql create_reservation.sql; do
+            echo "Running schema/$f..."
+            docker exec -i $DB_CONTAINER mysql -u root -proot_password schedule_db < "Database/schema/$f"
+          done
+
+          for f in seeds_rooms.sql seeds_hosts.sql seeds_events.sql seeds_reservations.sql; do
+            echo "Running $f..."
+            docker exec -i $DB_CONTAINER mysql -u root -proot_password schedule_db < "Database/seed/$f"
+          done
+
+          # Stored procedures — inject DELIMITER wrapper at runtime
+          # (The SQL files don't have DELIMITER because MySQL Workbench doesn't need it.
+          #  The mysql CLI does, so we wrap it here without modifying the original files.)
+          for f in sp_get_reservation.sql sp_insert_reservation.sql sp_edit_reservation.sql sp_delete_reservation.sql; do
+            echo "Running procedures/$f..."
+            (echo "DELIMITER \$\$"; cat "Database/procedures/$f" | sed 's/^END$/END\$\$/'; echo ""; echo "DELIMITER ;") | docker exec -i $DB_CONTAINER mysql -u root -proot_password schedule_db
+          done
 
       # ── Restart API to reconnect after seeding ────────
       - name: Restart backend container
