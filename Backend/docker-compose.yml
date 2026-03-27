@@ -4,7 +4,7 @@ services:
   backend:
     build: .
     ports:
-      - "8000:8000"
+      - "8001:8000"
     environment:
       - host=db
       - port=3306
@@ -25,7 +25,7 @@ services:
       MYSQL_ROOT_PASSWORD: root_password
       MYSQL_DATABASE: schedule_db
     ports:
-      - "3307:3306"
+      - "8080:3306"
     volumes:
       - db_data:/var/lib/mysql
       # Mount the Database directory to /docker-entrypoint-initdb.d so scripts run on init

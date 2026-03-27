@@ -35,9 +35,9 @@ jobs:
             # Build and run new container
             cd Backend
             docker build -t classroom-backend .
-            docker run -d -p 8000:8000 --env-file .env --name classroom-api --restart unless-stopped classroom-backend
+            docker run -d -p 8001:8000 --env-file .env --name classroom-api --restart unless-stopped classroom-backend
             
             # Verify deployment
             sleep 5
-            curl -f http://localhost:8000/reservations || exit 1
+            curl -f http://localhost:8001/reservations || exit 1
             echo "Deployment successful!"

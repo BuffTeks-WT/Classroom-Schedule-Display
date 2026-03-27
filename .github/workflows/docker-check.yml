@@ -1,0 +1,113 @@
+name: Docker Build & Test
+
+on:
+  pull_request:
+    branches: [main, develop, backend]
+    paths:
+      - 'Backend/**'
+      - 'Database/**'
+      - 'docker-compose.yml'
+  workflow_dispatch:
+
+jobs:
+  docker-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # ── Build & Start Containers ──────────────────────
+      - name: Create backend .env for CI
+        run: |
+          cat <<EOF > Backend/.env
+          host=db
+          port=3306
+          usernameDB=root
+          password=root_password
+          database=schedule_db
+          ALLOWED_ORIGINS=*
+          EOF
+
+      - name: Build and start Docker Compose
+        run: docker compose -f Backend/docker-compose.yml up -d --build
+
+      - name: Wait for MySQL to be healthy
+        run: |
+          echo "Waiting for MySQL health check..."
+          for i in $(seq 1 30); do
+            if docker compose -f Backend/docker-compose.yml exec -T db mysqladmin ping -h localhost --silent 2>/dev/null; then
+              echo "MySQL is ready!"
+              break
+            fi
+            echo "Attempt $i/30 — waiting 5s..."
+            sleep 5
+          done
+
+      # ── Seed the Database ─────────────────────────────
+      - name: Load schema, seeds, and stored procedures
+        run: |
+          DB_CONTAINER=$(docker compose -f Backend/docker-compose.yml ps -q db)
+
+          # Copy SQL files into the container
+          docker cp Database/schema/.   $DB_CONTAINER:/tmp/schema/
+          docker cp Database/seed/.     $DB_CONTAINER:/tmp/seed/
+          docker cp Database/procedures/. $DB_CONTAINER:/tmp/procedures/
+
+          # Execute in order: schema → seeds → procedures
+          docker exec $DB_CONTAINER bash -c "
+            mysql -u root -proot_password schedule_db <<SQL
+              source /tmp/schema/create_room.sql;
+              source /tmp/schema/create_host.sql;
+              source /tmp/schema/create_event.sql;
+              source /tmp/schema/create_reservation.sql;
+              source /tmp/seed/seeds_rooms.sql;
+              source /tmp/seed/seeds_hosts.sql;
+              source /tmp/seed/seeds_events.sql;
+              source /tmp/seed/seeds_reservations.sql;
+              source /tmp/procedures/sp_get_reservation.sql;
+              source /tmp/procedures/sp_insert_reservation.sql;
+              source /tmp/procedures/sp_edit_reservation.sql;
+              source /tmp/procedures/sp_delete_reservation.sql;
+          SQL
+          "
+
+      # ── Restart API to reconnect after seeding ────────
+      - name: Restart backend container
+        run: |
+          docker compose -f Backend/docker-compose.yml restart backend
+          sleep 10
+
+      # ── Verify API is Live ────────────────────────────
+      - name: Health check — GET /reservations
+        run: |
+          echo "Testing API endpoint..."
+          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8001/reservations)
+          if [ "$HTTP_CODE" -eq 200 ]; then
+            echo "✅ API returned HTTP $HTTP_CODE"
+          else
+            echo "❌ API returned HTTP $HTTP_CODE — expected 200"
+            docker compose -f Backend/docker-compose.yml logs backend
+            exit 1
+          fi
+
+      - name: Verify Swagger docs load
+        run: |
+          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8001/docs)
+          if [ "$HTTP_CODE" -eq 200 ]; then
+            echo "✅ Swagger UI returned HTTP $HTTP_CODE"
+          else
+            echo "❌ Swagger UI returned HTTP $HTTP_CODE"
+            exit 1
+          fi
+
+      # ── Run Integration Tests ─────────────────────────
+      - name: Run CRUD integration tests (test_db.py)
+        run: |
+          docker compose -f Backend/docker-compose.yml exec -T backend python test_db.py
+
+      # ── Cleanup ───────────────────────────────────────
+      - name: Tear down containers
+        if: always()
+        run: docker compose -f Backend/docker-compose.yml down -v
