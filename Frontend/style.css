@@ -1,15 +1,181 @@
-body{
-    background-image: url('Images/Background.png');
-    background-size: 100%;
-    background-repeat: no-repeat;
-    
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap');
+
+:root {
+    --maroon: #450012;
+    --maroon-hover: #6b0019;
+    --gold: #cfad4c;
+    --gold-hover: #dfbd5c;
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-bg-dark: rgba(69, 0, 18, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.45);
+    --shadow-premium: 0 8px 32px rgba(69, 0, 18, 0.08);
+    --text-dark: #222222;
+    --text-muted: #555555;
+    --font-family: 'Outfit', 'Inter', 'Segoe UI', Arial, sans-serif;
 }
-h1{
+
+body {
+    background-image: url('Images/Background.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    margin: 0;
+    font-family: var(--font-family);
+}
+
+.home-page {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+h1 {
     color: #ffffff;
     text-align: center;
-    font-family: 'Arial', sans-serif;
+    font-family: var(--font-family);
     font-size: 60px;
 }
+
+.home-wrapper {
+    width: 100%;
+    max-width: 800px;
+    padding: 24px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.home-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-top: 6px solid var(--gold);
+    border-radius: 24px;
+    padding: 50px 40px;
+    text-align: center;
+    box-shadow: 0 15px 45px rgba(0, 0, 0, 0.15), 0 5px 15px rgba(69, 0, 18, 0.05);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    width: 100%;
+    box-sizing: border-box;
+    animation: homeFadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes homeFadeIn {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.home-seal {
+    width: clamp(100px, 15vw, 150px);
+    height: auto;
+    object-fit: contain;
+    transition: transform 0.5s ease;
+}
+
+.home-seal:hover {
+    transform: rotate(5deg) scale(1.05);
+}
+
+.home-title {
+    color: var(--maroon);
+    font-family: var(--font-family);
+    font-size: clamp(1.8rem, 4.5vw, 3rem);
+    font-weight: 800;
+    line-height: 1.25;
+    margin: 0;
+    text-align: center;
+}
+
+.home-subtitle {
+    color: var(--text-dark);
+    font-family: var(--font-family);
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    font-weight: 400;
+    margin: 0;
+    max-width: 600px;
+    opacity: 0.85;
+    line-height: 1.5;
+}
+
+.home-actions {
+    display: flex;
+    gap: 20px;
+    width: 100%;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.home-btn {
+    padding: 16px 32px;
+    font-family: var(--font-family);
+    font-size: 16px;
+    font-weight: 700;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    text-decoration: none;
+    box-sizing: border-box;
+}
+
+.home-btn.primary {
+    background-color: var(--maroon);
+    color: white;
+    border: 2px solid var(--maroon);
+    box-shadow: 0 4px 14px rgba(69, 0, 18, 0.25);
+}
+
+.home-btn.primary:hover {
+    background-color: var(--maroon-hover);
+    border-color: var(--gold);
+    color: var(--gold);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(69, 0, 18, 0.35), 0 0 10px rgba(207, 173, 76, 0.3);
+}
+
+.home-btn.secondary {
+    background-color: transparent;
+    color: var(--maroon);
+    border: 2px solid var(--maroon);
+}
+
+.home-btn.secondary:hover {
+    background-color: var(--maroon);
+    color: var(--gold);
+    border-color: var(--maroon);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(69, 0, 18, 0.25);
+}
+
+.home-btn:active {
+    transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+    .home-card {
+        padding: 40px 24px;
+        gap: 20px;
+    }
+    .home-actions {
+        flex-direction: column;
+        gap: 12px;
+        width: 100%;
+    }
+    .home-btn {
+        width: 100%;
+    }
+}
+
 .center {
     display: flex;
     justify-content: center;
@@ -38,3 +204,3142 @@ input[type="button"] {
     vertical-align: middle;
 }
 
+/* ── Schedule Page ─────────────────────────────────── */
+
+.schedule-page {
+    background-image: none;
+    background-color: #f4f4f4;
+    min-height: 100vh;
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+}
+
+.schedule-header {
+    background-color: #450012;
+    color: white;
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.schedule-title {
+    color: white;
+    font-size: 28px;
+    margin: 0;
+    text-align: left;
+}
+
+.back-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: 2px solid white;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.back-btn:hover {
+    background: rgba(255, 255, 255, 0.35);
+}
+
+.schedule-main {
+    padding: 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Loading state */
+.loading-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #555;
+    font-size: 18px;
+}
+
+.spinner {
+    width: 48px;
+    height: 48px;
+    border: 5px solid #ddd;
+    border-top: 5px solid #450012;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 16px;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Error state */
+.error-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #c0392b;
+    font-size: 18px;
+}
+
+.retry-btn {
+    background-color: #450012;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 12px;
+}
+
+.retry-btn:hover {
+    background-color: #6b0019;
+}
+
+/* Empty state */
+.no-data {
+    text-align: center;
+    color: #777;
+    font-size: 18px;
+    padding: 60px 20px;
+}
+
+/* Reservations grid */
+.reservations-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 15px;
+}
+
+/* Reservation card */
+.reservation-card {
+    background: white;
+    border-radius: 10px;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-left: 5px solid #450012;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    height: 80%;
+    overflow: hidden;
+}
+
+.card-title {
+    font-size: 20px;
+    color: #450012;
+    margin: 0;
+    line-height: 1.3;
+}
+
+/* Keep card titles to two lines max so every card stays uniform height */
+.reservation-card .card-title {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    /* Never let the fixed-height flex card squeeze/clip the 2-line title */
+    flex-shrink: 0;
+}
+
+.card-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 14px;
+    color: #444;
+}
+
+.card-time {
+    font-size: 15px;
+    font-weight: bold;
+    color: #222;
+}
+
+.card-description {
+    font-size: 14px;
+    color: #555;
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* On the grid cards, keep the description to a single line with an ellipsis.
+   The full text is available in the details modal. */
+.card-description--preview {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+
+/* Pin the status badge to the bottom so fixed-height cards line up */
+.reservation-card .card-status {
+    margin-top: auto;
+}
+
+.card-status {
+    display: inline-block;
+    background-color: #450012;
+    color: white;
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 12px;
+    align-self: flex-start;
+    text-transform: capitalize;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .schedule-title {
+        font-size: 20px;
+    }
+
+    .reservations-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* On very small screens, let cards grow to fit content so wrapped titles and
+   details are never clipped by the fixed desktop card height. */
+@media (max-width: 360px) {
+    .reservation-card {
+        height: auto;
+    }
+}
+
+/* ── Reservation Form & Modals ─────────────────────── */
+
+.form-container {
+    background: white;
+    padding: 32px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    margin: 0 auto;
+    border-top: 6px solid #450012;
+}
+
+.form-section {
+    margin-bottom: 28px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.form-section:last-of-type {
+    border-bottom: none;
+    margin-bottom: 15px;
+}
+
+.form-section h3 {
+    color: #450012;
+    font-size: 18px;
+    margin-top: 0;
+    margin-bottom: 16px;
+    font-family: 'Arial', sans-serif;
+    border-left: 4px solid #cfad4c;
+    padding-left: 8px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px 20px;
+}
+
+.form-label {
+    display: flex;
+    flex-direction: column;
+    font-size: 14px;
+    font-weight: bold;
+    color: #444;
+    gap: 6px;
+}
+
+.form-label.full-width,
+.full-width {
+    grid-column: 1 / span 2;
+}
+
+.form-label input,
+.form-label select,
+.form-label textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px 12px;
+    border: 1.5px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    font-family: 'Arial', sans-serif;
+}
+
+.form-label input:focus,
+.form-label select:focus,
+.form-label textarea:focus {
+    border-color: #450012;
+    box-shadow: 0 0 0 3px rgba(69, 0, 18, 0.15);
+}
+
+.form-label input[readonly] {
+    background-color: #f5f5f5;
+    color: #777;
+    cursor: not-allowed;
+}
+
+.form-warning {
+    background-color: #fdf2f2;
+    color: #c0392b;
+    border: 1px solid #f5c6cb;
+    padding: 12px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 15px;
+}
+
+.submit-form-btn,
+.cancel-form-btn {
+    padding: 12px 24px;
+    font-size: 15px;
+    font-weight: bold;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s, border-color 0.2s, color 0.2s, transform 0.1s;
+}
+
+.submit-form-btn {
+    background-color: #450012;
+    color: white;
+}
+
+.submit-form-btn:hover {
+    background-color: #6b0019;
+}
+
+/* Edit Details: blue secondary outline (matches View Kiosk / Preview styling) */
+.submit-form-btn.edit-details-btn {
+    background-color: #ffffff;
+    color: #1d4ed8;
+    border-color: #2563eb;
+}
+
+.submit-form-btn.edit-details-btn:hover {
+    background-color: #eff4ff;
+    border-color: #1d4ed8;
+    color: #1e40af;
+}
+
+.submit-form-btn:active,
+.cancel-form-btn:active {
+    transform: scale(0.98);
+}
+
+.cancel-form-btn {
+    background-color: #e0e0e0;
+    color: #333;
+}
+
+.cancel-form-btn:hover {
+    background-color: #d2d2d2;
+}
+
+/* View Kiosk: neutral secondary outline */
+.cancel-form-btn.view-kiosk-btn {
+    background-color: #ffffff;
+    color: #334155;
+    border-color: #cbd5e1;
+}
+
+.cancel-form-btn.view-kiosk-btn:hover {
+    background-color: #f1f5f9;
+    border-color: #94a3b8;
+    color: #1e293b;
+}
+
+/* Preview Event: brand-gold secondary outline */
+.cancel-form-btn.preview-event-btn {
+    background-color: #ffffff;
+    color: #8a6d12;
+    border-color: #cfad4c;
+}
+
+.cancel-form-btn.preview-event-btn:hover {
+    background-color: #fbf5e6;
+    border-color: #b9962f;
+    color: #6f5810;
+}
+
+/* Cancel Reservation: red secondary outline (matches View Kiosk / Preview styling) */
+.delete-btn {
+    background-color: #ffffff;
+    color: #c0392b;
+    border-color: #d64045;
+}
+
+.delete-btn:hover {
+    background-color: #fdeced;
+    border-color: #be3a3f;
+    color: #a93226;
+}
+
+/* Modals & Overlays */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 20px;
+    box-sizing: border-box;
+    animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.modal-card {
+    background: white;
+    padding: 0;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    max-width: 550px;
+    width: 100%;
+    max-height: 88vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    border-top: 6px solid #450012;
+    animation: slideUp 0.25s ease-out;
+}
+
+@keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.close-modal-btn {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    z-index: 10;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 26px;
+    font-weight: bold;
+    line-height: 1;
+    color: #999;
+    cursor: pointer;
+    transition: color 0.2s, background 0.2s;
+}
+
+.close-modal-btn:hover {
+    color: #333;
+    background: rgba(0, 0, 0, 0.06);
+}
+
+/* The modal body scrolls inside the fixed-height card so the close button (and
+   the footer action buttons) stay reachable while long details scroll. */
+#modal-view-mode,
+#modal-edit-mode {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    /* Padding lives on the scrolling body (not the card) so the scrollbar sits
+       flush against the card's right edge, directly under the close button. */
+    padding: 32px;
+}
+
+.modal-body {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 16px;
+    font-family: 'Arial', sans-serif;
+    color: #333;
+    font-size: 15px;
+}
+
+.modal-body p {
+    margin: 0;
+    line-height: 1.4;
+}
+
+.modal-body strong {
+    color: #450012;
+}
+
+/* Success Modal specific styling */
+.success-icon {
+    width: 60px;
+    height: 60px;
+    background-color: #2ecc71;
+    color: white;
+    font-size: 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    margin: 0 auto 16px;
+}
+
+#success-overlay h2 {
+    color: #450012;
+    margin: 0 0 10px;
+    font-size: 24px;
+    text-align: center;
+}
+
+#success-overlay p {
+    color: #555;
+    font-size: 16px;
+    margin-bottom: 24px;
+    text-align: center;
+}
+
+/* Dynamic status classes */
+.status-confirmed {
+    background-color: #450012 !important; /* Maroon */
+    color: white !important;
+}
+
+.status-pending {
+    background-color: #cfad4c !important; /* WTAMU Gold */
+    color: #222 !important;
+}
+
+.status-cancelled {
+    background-color: #7f8c8d !important; /* Grey */
+    color: white !important;
+}
+
+/* Responsive adjustment for form grid */
+@media (max-width: 600px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+    .form-label.full-width,
+    .full-width {
+        grid-column: auto;
+    }
+    .form-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
+
+/* Stack the modal/form action buttons into a full-width column on narrow and
+   mid-width screens so they never wrap and stagger. Covers through 769px, the
+   range where the four-button row gets cramped inside the modal card. */
+@media (max-width: 769px) {
+    .form-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
+
+/* On laptops and larger, fit all four modal footer buttons evenly in a single
+   row. flex:1 + min-width:0 makes them share the width equally and shrink to
+   fit, and nowrap guarantees they never spill onto a second row. */
+@media (min-width: 770px) {
+    #modal-view-mode .form-actions {
+        flex-wrap: nowrap;
+        gap: 12px;
+    }
+    #modal-view-mode .form-actions .submit-form-btn,
+    #modal-view-mode .form-actions .cancel-form-btn {
+        flex: 1 1 0;
+        min-width: 0;
+        padding-left: 14px;
+        padding-right: 14px;
+        text-align: center;
+    }
+}
+
+/* ── Redesigned Side-by-Side Filters Sidebar Dashboard ────────────────── */
+.dashboard-layout {
+    display: flex;
+    gap: 30px;
+    align-items: flex-start;
+    width: 100%;
+}
+
+.dashboard-sidebar {
+    width: 300px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 24px;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border);
+    border-top: 5px solid var(--gold);
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: var(--shadow-premium);
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid rgba(69, 0, 18, 0.1);
+    padding-bottom: 12px;
+}
+
+.sidebar-header h2 {
+    color: var(--maroon);
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0;
+}
+
+.close-sidebar-btn {
+    display: none;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    color: var(--text-muted);
+    transition: color 0.2s;
+}
+
+.close-sidebar-btn:hover {
+    color: var(--maroon);
+}
+
+.filter-fields-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.filter-item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+}
+
+.filter-item span {
+    color: var(--maroon);
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.filter-item input,
+.filter-item select {
+    padding: 12px 14px;
+    border: 1.5px solid #d2d2d2;
+    border-radius: 8px;
+    font-size: 14px;
+    background: white;
+    outline: none;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    color: #222;
+}
+
+.filter-item input:focus,
+.filter-item select:focus {
+    border-color: var(--maroon);
+    box-shadow: 0 0 0 3px rgba(69, 0, 18, 0.15);
+    transform: translateY(-1px);
+}
+
+.filter-checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-dark);
+    cursor: pointer;
+    user-select: none;
+    margin-top: 4px;
+}
+
+.filter-checkbox-item input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--maroon);
+    cursor: pointer;
+}
+
+.filter-actions {
+    display: flex;
+    gap: 12px;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    padding-top: 16px;
+}
+
+.btn-clear,
+.btn-apply {
+    flex: 1;
+    padding: 12px;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+}
+
+.btn-clear {
+    background: transparent;
+    color: var(--maroon);
+    border: 2px solid var(--maroon);
+}
+
+.btn-clear:hover {
+    background: rgba(69, 0, 18, 0.05);
+    transform: translateY(-1px);
+}
+
+.btn-apply {
+    background: var(--maroon);
+    color: white;
+    border: 2px solid var(--maroon);
+    box-shadow: 0 4px 12px rgba(69, 0, 18, 0.2);
+}
+
+.btn-apply:hover {
+    background: var(--maroon-hover);
+    border-color: var(--maroon-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(69, 0, 18, 0.3);
+}
+
+.btn-clear:active,
+.btn-apply:active {
+    transform: translateY(0);
+}
+
+.dashboard-main-content {
+    flex-grow: 1;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.dashboard-toolbar {
+    display: none;
+}
+
+.mobile-filter-btn {
+    background-color: var(--maroon);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 20px;
+    font-family: var(--font-family);
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(69, 0, 18, 0.15);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s;
+}
+
+.mobile-filter-btn:hover {
+    background-color: var(--maroon-hover);
+}
+
+@media (max-width: 900px) {
+    .dashboard-layout {
+        position: relative;
+    }
+
+    .dashboard-sidebar {
+        position: fixed;
+        top: 0;
+        left: -360px; /* Hidden offscreen */
+        width: 320px;
+        height: 100vh;
+        z-index: 10000;
+        border-radius: 0 24px 24px 0;
+        box-shadow: 20px 0 50px rgba(0, 0, 0, 0.3);
+        transition: left 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        background: rgba(255, 255, 255, 0.98);
+        border: none;
+        border-right: 5px solid var(--gold);
+        overflow-y: auto;
+    }
+
+    .dashboard-sidebar.open {
+        left: 0;
+    }
+
+    .close-sidebar-btn {
+        display: block;
+    }
+
+    .dashboard-toolbar {
+        display: flex;
+        justify-content: flex-start;
+    }
+}
+
+/* ── door-side classroom kiosk screen view ────────────────── */
+.kiosk-body {
+    background-color: #333333;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Arial', sans-serif;
+}
+
+.kiosk-tablet-frame {
+    background: #222222;
+    border: 30px solid #555555;
+    border-radius: 40px;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(0, 0, 0, 0.8);
+    width: 90vw;
+    max-width: 70%;
+    height: min(600px, calc(100vh - 40px));
+    box-sizing: border-box;
+    display: flex;
+    overflow: hidden;
+    position: relative;
+    border-bottom-width: 45px; /* Thicker bezel at bottom for tablet button look */
+}
+
+/* Tablet home button look */
+.kiosk-tablet-frame::after {
+    content: '';
+    position: absolute;
+    bottom: -35px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 20px;
+    background: #333;
+    border-radius: 50%;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.5);
+    z-index: 100;
+}
+
+.kiosk-split-screen {
+    width: 100%;
+    height: 100%;
+    display: flex;
+}
+
+.kiosk-left-panel {
+    width: 55%;
+    background-color: #450012; /* WTAMU Maroon */
+    color: white;
+    padding: clamp(20px, 4vw, 40px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-sizing: border-box;
+    border-right: 4px solid #b8901f; /* Gold dividing stripe (deeper gold) */
+    position: relative;
+    overflow-y: auto;
+    overflow-x: hidden;
+    min-height: 0;
+}
+
+.kiosk-right-panel {
+    width: 45%;
+    background-color: #e1e1e1; /* Silver Gray */
+    padding: clamp(20px, 4vw, 40px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-sizing: border-box;
+    position: relative;
+    overflow-y: auto;
+    min-height: 0;
+}
+
+.kiosk-logo-watermark {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    width: 90px;
+    height: 90px;
+    opacity: 0.15;
+    pointer-events: none;
+}
+
+.kiosk-room-header {
+    font-size: clamp(20px, 3vw, 32px);
+    font-weight: bold;
+    margin: 0 0 16px 0;
+    text-align: center;
+    letter-spacing: 1px;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.15);
+    padding-bottom: 12px;
+    text-transform: uppercase;
+}
+
+.kiosk-current-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex-grow: 1;
+    margin-bottom: 16px;
+}
+
+.kiosk-current-time-range {
+    font-size: clamp(26px, 4.6vw, 46px);
+    font-weight: bold;
+    margin: 0 0 8px 0;
+    color: #ffffff;
+}
+
+.kiosk-current-title {
+    font-size: clamp(20px, 3.8vw, 38px);
+    font-weight: bold;
+    margin: 0 0 8px 0;
+    color: #cfad4c; /* Gold Accent */
+}
+
+.kiosk-current-host {
+    font-size: clamp(14px, 2.4vw, 26px);
+    margin: 0;
+    opacity: 0.9;
+}
+
+.kiosk-left-footer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    text-align: right;
+}
+
+.kiosk-clock {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    color: #ffffff;
+}
+
+.kiosk-clock-day {
+    font-size: clamp(12px, 1.6vw, 20px);
+    font-weight: bold;
+    opacity: 0.8;
+}
+
+.kiosk-clock-time {
+    font-size: clamp(15px, 2vw, 24px);
+    font-weight: bold;
+    letter-spacing: 0.5px;
+}
+
+/* Right Panel Main Views */
+.kiosk-right-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+}
+
+.kiosk-next-header {
+    font-size: clamp(20px, 3.2vw, 36px);
+    font-weight: bold;
+    color: #222222;
+    margin: 0 0 20px 0;
+    border-bottom: 3px solid #450012;
+    padding-bottom: 8px;
+}
+
+.kiosk-next-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    flex-grow: 1;
+    margin-top: 10px;
+    overflow-y: auto;
+}
+
+.kiosk-next-item {
+    border-left: 5px solid #450012;
+    background: rgba(255, 255, 255, 0.6);
+    padding: 12px 16px;
+    border-radius: 0 8px 8px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    transition: background 0.2s ease;
+}
+
+.kiosk-next-item:hover {
+    background: rgba(255, 255, 255, 0.95);
+}
+
+.kiosk-next-time {
+    font-size: 16px;
+    font-weight: bold;
+    color: #450012;
+}
+
+.kiosk-next-details {
+    font-size: 18px;
+    font-weight: bold;
+    color: #222222;
+}
+
+.kiosk-next-host {
+    font-size: 15px;
+    color: #555555;
+}
+
+.kiosk-reserve-cta {
+    width: 100%;
+    background-color: #450012;
+    color: white;
+    font-size: clamp(15px, 2vw, 22px);
+    font-weight: bold;
+    padding: 18px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 6px 15px rgba(69, 0, 18, 0.25);
+    transition: all 0.25s ease;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.kiosk-reserve-cta:hover {
+    background-color: #6b0019;
+    box-shadow: 0 8px 20px rgba(69, 0, 18, 0.4);
+    transform: translateY(-2px);
+}
+
+/* Kiosk QR Booking View styling */
+.kiosk-qr-panel {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+.kiosk-qr-header {
+    font-size: 34px;
+    font-weight: bold;
+    color: #222222;
+    margin: 0;
+    text-align: center;
+}
+
+.kiosk-qrcode-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 15px 0;
+    background: white;
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    align-self: center;
+}
+
+.kiosk-qrcode-container img {
+    display: block;
+    width: 180px;
+    height: 180px;
+}
+
+.kiosk-qr-instruction {
+    font-size: 16px;
+    color: #444444;
+    text-align: center;
+    line-height: 1.5;
+    margin: 0 0 15px 0;
+}
+
+.kiosk-qr-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.kiosk-qr-btn {
+    width: 100%;
+    padding: 14px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s ease;
+}
+
+.kiosk-qr-btn.primary {
+    background-color: #450012;
+    color: white;
+}
+
+.kiosk-qr-btn.primary:hover {
+    background-color: #6b0019;
+}
+
+.kiosk-qr-btn.secondary {
+    background-color: transparent;
+    color: #450012;
+    border: 2px solid #450012;
+}
+
+.kiosk-qr-btn.secondary:hover {
+    background-color: rgba(69,0,18,0.05);
+}
+
+/* Admin Setup Screen Style */
+.kiosk-admin-setup {
+    width: 100%;
+    height: 100%;
+    background-color: #450012;
+    color: white;
+    padding: 50px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.kiosk-admin-title {
+    font-size: 32px;
+    font-weight: bold;
+    margin: 0 0 10px 0;
+    text-align: center;
+}
+
+.kiosk-admin-desc {
+    font-size: 18px;
+    color: #cfad4c;
+    margin: 0 0 30px 0;
+    text-align: center;
+}
+
+.kiosk-room-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    width: 100%;
+    max-height: 350px;
+    overflow-y: auto;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.kiosk-room-btn {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.25);
+    color: white;
+    padding: 15px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+}
+
+.kiosk-room-btn:hover {
+    background: #cfad4c;
+    color: #450012;
+    border-color: #cfad4c;
+    transform: translateY(-2px);
+}
+
+/* Exit buttons */
+.kiosk-exit-btn {
+    position: absolute;
+    top: clamp(8px, 1.5vmin, 12px);
+    left: clamp(8px, 1.5vmin, 12px);
+    width: clamp(30px, 5vmin, 44px);
+    height: clamp(30px, 5vmin, 44px);
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: white;
+    font-size: clamp(16px, 3vmin, 24px);
+    line-height: 1;
+    text-align: center;
+    cursor: pointer;
+    z-index: 10;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.kiosk-exit-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    border-color: #cfad4c;
+    color: #cfad4c;
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.kiosk-exit-setup-btn {
+    background: transparent;
+    border: 2px solid #cfad4c;
+    color: #cfad4c;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.kiosk-exit-setup-btn:hover {
+    background: #cfad4c;
+    color: #450012;
+    transform: translateY(-1px);
+}
+
+/* Building Filters Pills styling */
+.kiosk-filter-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    max-width: 90%;
+    margin: 0 auto 20px auto;
+}
+
+.kiosk-filter-pill {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1.5px solid rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.85);
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.kiosk-filter-pill:hover {
+    background: rgba(255, 255, 255, 0.25);
+    color: white;
+    transform: translateY(-1px);
+}
+
+.kiosk-filter-pill.active {
+    background: #cfad4c;
+    border-color: #cfad4c;
+    color: #450012;
+    box-shadow: 0 4px 10px rgba(207, 173, 76, 0.3);
+}
+
+/* Premium Kiosk Empty Booking Card styling */
+.kiosk-empty-booking-card {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    border-radius: 12px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+    margin-top: 10px;
+}
+
+.kiosk-empty-status-tag {
+    background-color: #2ecc71;
+    color: white;
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 1.5px;
+    padding: 4px 12px;
+    border-radius: 12px;
+    text-transform: uppercase;
+}
+
+.kiosk-empty-qr-wrapper {
+    background: white;
+    padding: 12px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+    transition: transform 0.3s ease;
+}
+
+.kiosk-empty-qr-wrapper:hover {
+    transform: scale(1.05);
+}
+
+.kiosk-empty-qr-img {
+    width: clamp(110px, 20vh, 140px);
+    height: clamp(110px, 20vh, 140px);
+    display: block;
+}
+
+/* The "Available" state QR (left panel) has an inline 150px size; scale it
+   responsively so it shrinks on shorter/smaller kiosk screens. */
+#kiosk-available-qr-image {
+    width: clamp(110px, 20vh, 150px) !important;
+    height: clamp(110px, 20vh, 150px) !important;
+}
+
+#kiosk-available-qr-container {
+    margin-top: 14px !important;
+}
+
+.kiosk-empty-instructions {
+    color: #222;
+}
+
+.kiosk-empty-instructions strong {
+    font-size: 18px;
+    color: #450012;
+    display: block;
+    margin-bottom: 6px;
+}
+
+.kiosk-empty-instructions p {
+    font-size: 14px;
+    color: #555;
+    margin: 0;
+    line-height: 1.4;
+}
+
+.kiosk-empty-browser-link {
+    font-size: 13px;
+    color: #450012;
+    text-decoration: none;
+    font-weight: bold;
+    border-bottom: 1.5px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.kiosk-empty-browser-link:hover {
+    color: #cfad4c;
+    border-bottom-color: #cfad4c;
+}
+
+/* ── Lightweight Vanilla Searchable Autocomplete Dropdowns ────────────────── */
+.custom-select-container {
+    position: relative;
+    width: 100%;
+}
+
+.custom-select-input {
+    width: 100%;
+    padding: 10px 35px 10px 12px !important; /* Extra room for arrow */
+    border: 1.5px solid #ccc !important;
+    border-radius: 6px !important;
+    font-size: 14px !important;
+    background: white !important;
+    outline: none !important;
+    transition: all 0.2s ease !important;
+    color: #222 !important;
+    box-sizing: border-box;
+    cursor: pointer;
+    font-family: var(--font-family) !important;
+}
+
+.custom-select-input:focus {
+    border-color: var(--maroon) !important;
+    box-shadow: 0 0 0 3px rgba(69, 0, 18, 0.15) !important;
+}
+
+.custom-select-arrow {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    font-size: 12px;
+    color: var(--text-muted);
+    transition: transform 0.25s ease;
+}
+
+.custom-select-container.open .custom-select-arrow {
+    transform: translateY(-50%) rotate(180deg);
+}
+
+.custom-select-dropdown {
+    position: absolute;
+    top: calc(100% + 5px);
+    left: 0;
+    width: 100%;
+    max-height: 250px;
+    overflow-y: auto;
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border);
+    border-radius: 8px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    z-index: 99999;
+    box-sizing: border-box;
+    padding: 6px 0;
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.custom-select-container.open .custom-select-dropdown {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.custom-select-group {
+    padding: 8px 12px 4px 12px;
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--maroon);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    background: rgba(69, 0, 18, 0.03);
+}
+
+.custom-select-option {
+    padding: 10px 14px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-dark);
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.custom-select-option:hover {
+    background-color: var(--maroon);
+    color: white !important;
+}
+
+.custom-select-option.selected {
+    background-color: rgba(69, 0, 18, 0.08);
+    color: var(--maroon);
+    font-weight: 700;
+}
+
+.custom-select-option.selected:hover {
+    background-color: var(--maroon);
+    color: white !important;
+}
+
+.custom-select-option.hidden {
+    display: none;
+}
+
+.custom-select-no-results {
+    padding: 12px 14px;
+    font-size: 14px;
+    color: var(--text-muted);
+    text-align: center;
+    font-style: italic;
+}
+
+/* ── Premium Details Modal Grid Layout Redesign ─────────────────────────── */
+.modal-card {
+    background: rgba(255, 255, 255, 0.98) !important;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-top: 6px solid var(--maroon) !important;
+    border-radius: 16px !important;
+    max-width: 680px !important; /* Slightly wider for the beautiful grid */
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3) !important;
+}
+
+.modal-card.editing {
+    max-width: min(1120px, 94vw) !important;
+}
+
+.edit-availability-section {
+    margin: 18px 0;
+    padding: 16px;
+    border: 1px solid rgba(69, 0, 18, 0.12);
+    border-radius: 12px;
+    background: rgba(69, 0, 18, 0.025);
+}
+
+.edit-availability-grid {
+    display: grid;
+    grid-template-columns: minmax(280px, 0.9fr) minmax(320px, 1.1fr);
+    gap: 16px;
+    align-items: start;
+}
+
+.edit-calendar-container,
+.edit-time-helper-panel {
+    margin: 0;
+    box-shadow: 0 8px 22px rgba(69, 0, 18, 0.08);
+}
+
+.edit-calendar-container .calendar-days {
+    gap: 6px;
+}
+
+.edit-calendar-container .calendar-day {
+    min-height: 44px;
+    border: 0;
+    font-family: var(--font-family);
+}
+
+.edit-time-helper-panel .daily-timeline {
+    max-height: 190px;
+}
+
+.edit-time-helper-panel .slots-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.edit-time-helper-panel .recommended-slot-pill {
+    min-height: 46px;
+    font-size: 11px;
+}
+
+@media (max-width: 860px) {
+    .edit-availability-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.modal-header-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid rgba(69, 0, 18, 0.1);
+    padding-bottom: 12px;
+    /* Reserve room so the status pill never collides with the close button */
+    padding-right: 34px;
+}
+
+/* On small screens, stack the title and status pill so the title gets full width */
+@media (max-width: 600px) {
+    .modal-header-section {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+}
+
+.modal-header-section h2 {
+    margin: 0;
+    font-size: clamp(20px, 4vw, 24px);
+    font-family: var(--font-family-title);
+    color: var(--maroon);
+    font-weight: 800;
+}
+
+/* Modern status pills */
+.modal-card .card-status {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    white-space: nowrap;
+    align-self: unset;
+}
+
+.modal-card .status-confirmed {
+    background: rgba(69, 0, 18, 0.1) !important;
+    color: var(--maroon) !important;
+    border: 1px solid rgba(69, 0, 18, 0.2) !important;
+}
+
+.modal-card .status-pending {
+    background: rgba(207, 173, 76, 0.15) !important;
+    color: #b58d1b !important;
+    border: 1px solid rgba(207, 173, 76, 0.3) !important;
+}
+
+.modal-card .status-cancelled {
+    background: rgba(119, 119, 119, 0.1) !important;
+    color: #555 !important;
+    border: 1px solid rgba(119, 119, 119, 0.2) !important;
+}
+
+.modal-grid-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+@media (max-width: 600px) {
+    .modal-grid-body {
+        grid-template-columns: 1fr;
+    }
+}
+
+.modal-grid-card {
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    border-radius: 10px;
+    padding: 14px 16px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+}
+
+.modal-grid-card.full-width {
+    grid-column: 1 / -1;
+}
+
+.modal-grid-card h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--maroon);
+    border-bottom: 1px solid rgba(69, 0, 18, 0.03);
+    padding-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.modal-grid-card p {
+    margin: 6px 0;
+    font-size: 14px;
+    color: var(--text-dark);
+}
+
+.modal-grid-card strong {
+    color: var(--maroon);
+}
+
+.logistics-row {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+/* Gold border glass plates for description & special needs */
+.modal-grid-card.highlight-card {
+    border: 1px dashed var(--gold);
+    background: rgba(207, 173, 76, 0.03);
+}
+
+.modal-grid-card.highlight-card h3 {
+    color: #a88421;
+    border-bottom-color: rgba(207, 173, 76, 0.2);
+}
+
+.modal-grid-card.highlight-card {
+    padding: 16px 18px;
+}
+
+.modal-grid-card.highlight-card .card-description {
+    font-style: normal;
+    color: #3a2a2e;
+    font-size: 15px;
+    line-height: 1.75;
+    margin: 4px 0 0;
+    /* Preserve any line breaks in the saved description for easier reading */
+    white-space: pre-line;
+}
+
+/* Special requirements rendered as readable gold tags instead of plain text */
+.modal-grid-card.highlight-card .requirement-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 6px 0 0;
+    white-space: normal;
+}
+
+.requirement-tag {
+    display: inline-block;
+    background: rgba(207, 173, 76, 0.18);
+    color: #6b4e0e;
+    border: 1px solid rgba(207, 173, 76, 0.45);
+    border-radius: 14px;
+    padding: 5px 12px;
+    font-size: 13px;
+    font-weight: 600;
+    font-style: normal;
+    line-height: 1.3;
+}
+
+/* ── Custom Confirmation Dialog ──────────────────────────────────────────── */
+.confirm-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(20, 0, 8, 0.55);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.confirm-overlay.open {
+    opacity: 1;
+}
+
+.confirm-card {
+    background: #fff;
+    border-radius: 14px;
+    padding: 30px 32px;
+    width: min(440px, 90vw);
+    text-align: center;
+    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
+    border-top: 6px solid #450012;
+    transform: scale(0.9) translateY(12px);
+    transition: transform 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.confirm-overlay.open .confirm-card {
+    transform: scale(1) translateY(0);
+}
+
+.confirm-icon {
+    font-size: 42px;
+    line-height: 1;
+    color: #cfad4c;
+    margin-bottom: 8px;
+}
+
+.confirm-card h3 {
+    margin: 6px 0 10px;
+    color: #450012;
+    font-size: 22px;
+}
+
+.confirm-card p {
+    color: #444;
+    font-size: 15px;
+    line-height: 1.6;
+    margin: 0 0 24px;
+}
+
+.confirm-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.confirm-btn {
+    border: none;
+    border-radius: 8px;
+    padding: 11px 22px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.15s ease, transform 0.1s ease;
+}
+
+.confirm-btn:active {
+    transform: translateY(1px);
+}
+
+.confirm-no {
+    background: #ececec;
+    color: #333;
+}
+
+.confirm-no:hover {
+    background: #dcdcdc;
+}
+
+.confirm-yes {
+    background: #b3001b;
+    color: #fff;
+}
+
+.confirm-yes:hover {
+    background: #8f0016;
+}
+
+/* ── Custom Toast Notification Engine ────────────────────────────────────── */
+#toast-container {
+    position: fixed;
+    top: 24px;
+    right: 24px;
+    z-index: 999999;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 360px;
+    width: calc(100% - 48px);
+    pointer-events: none;
+}
+
+.toast-notification {
+    pointer-events: auto;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+    border-radius: 12px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    color: var(--text-dark);
+    font-family: var(--font-family);
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.4;
+    transform: translate3d(120%, 0, 0) scale(0.98);
+    opacity: 0;
+    animation: toastSlideIn 0.38s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    will-change: transform, opacity;
+}
+
+@keyframes toastSlideIn {
+    0% {
+        transform: translate3d(120%, 0, 0) scale(0.98);
+        opacity: 0;
+    }
+    70% {
+        transform: translate3d(-6px, 0, 0) scale(1);
+        opacity: 1;
+    }
+    to {
+        transform: translate3d(0, 0, 0) scale(1);
+        opacity: 1;
+    }
+}
+
+.toast-notification.fade-out {
+    pointer-events: none;
+    animation: toastSlideOut 0.32s cubic-bezier(0.7, 0, 0.84, 0) forwards;
+}
+
+@keyframes toastSlideOut {
+    from {
+        transform: translate3d(0, 0, 0) scale(1);
+        opacity: 1;
+    }
+    to {
+        transform: translate3d(120%, 0, 0) scale(0.98);
+        opacity: 0;
+    }
+}
+
+.toast-icon {
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.toast-success {
+    border-left: 5px solid #2ecc71;
+}
+.toast-success .toast-icon {
+    background: rgba(46, 204, 113, 0.15);
+    color: #2ecc71;
+}
+
+.toast-error {
+    border-left: 5px solid #e74c3c;
+}
+.toast-error .toast-icon {
+    background: rgba(231, 76, 60, 0.15);
+    color: #e74c3c;
+}
+
+.toast-warning {
+    border-left: 5px solid var(--gold);
+}
+.toast-warning .toast-icon {
+    background: rgba(207, 173, 76, 0.15);
+    color: #b58d1b;
+}
+
+.toast-info {
+    border-left: 5px solid #3498db;
+}
+.toast-info .toast-icon {
+    background: rgba(52, 152, 219, 0.15);
+    color: #3498db;
+}
+
+.toast-message {
+    flex-grow: 1;
+}
+
+.toast-close {
+    cursor: pointer;
+    font-size: 16px;
+    color: var(--text-muted);
+    font-weight: bold;
+    transition: color 0.15s;
+    user-select: none;
+}
+
+.toast-close:hover {
+    color: var(--maroon);
+}
+
+/* ==========================================================================
+   WIZARD STEP TRACKER, AVAILABILITY CALENDAR & SCHEDULING UI
+   ========================================================================== */
+
+/* Progressive Booking Wizard Tracker */
+.step-progress-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 35px;
+    padding: 0 10px;
+    position: relative;
+    user-select: none;
+}
+
+.step-progress-node {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 5;
+    flex: 1;
+}
+
+.step-progress-node .node-number {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 2px solid #d2d2d2;
+    color: #888888;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 15px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.step-progress-node .node-text {
+    margin-top: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #888888;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.step-progress-connector {
+    flex-grow: 1;
+    height: 3px;
+    background: #e1e1e1;
+    margin: -22px 10px 0 10px; /* pull alignment up with node numbers */
+    position: relative;
+    z-index: 1;
+    transition: all 0.35s ease;
+}
+
+/* Step Progress Active & Completed States */
+/* Active (current) step = gold so the user sees what they're working on */
+.step-progress-node.active .node-number {
+    border-color: var(--gold);
+    background: var(--gold);
+    color: var(--maroon);
+    box-shadow: 0 0 0 4px rgba(207, 173, 76, 0.25), 0 4px 10px rgba(207, 173, 76, 0.3);
+}
+
+.step-progress-node.active .node-text {
+    color: #a07d1c;
+}
+
+/* Completed steps = maroon */
+.step-progress-node.completed .node-number {
+    border-color: var(--maroon);
+    background: var(--maroon);
+    color: #ffffff;
+    box-shadow: 0 4px 8px rgba(69, 0, 18, 0.2);
+}
+
+.step-progress-node.completed .node-text {
+    color: var(--maroon);
+}
+
+.step-progress-connector.completed {
+    background: var(--maroon);
+}
+
+/* Wizard Form Grid & Section Tweaks */
+.wizard-step {
+    transition: all 0.3s ease;
+}
+
+.form-grid-single {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* Step 3 Horizontal Layout Split */
+.step-3-layout {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 28px;
+    align-items: start;
+    margin-top: 15px;
+}
+
+.step-3-inputs {
+    background: rgba(255, 255, 255, 0.45);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 20px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.step-3-calendar-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Room Availability Banner Alert states */
+.classroom-availability-alert {
+    background: rgba(69, 0, 18, 0.05);
+    border: 1.5px dashed rgba(69, 0, 18, 0.3);
+    color: var(--maroon);
+    border-radius: 12px;
+    padding: 18px;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.5;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.01);
+}
+
+.classroom-availability-alert.warning {
+    background: rgba(231, 76, 60, 0.05);
+    border-color: rgba(231, 76, 60, 0.3);
+    color: #c0392b;
+}
+
+.classroom-availability-alert.loading {
+    background: rgba(52, 152, 219, 0.05);
+    border-color: rgba(52, 152, 219, 0.3);
+    color: #2980b9;
+}
+
+.classroom-availability-alert.error {
+    background: rgba(231, 76, 60, 0.05);
+    border-color: rgba(231, 76, 60, 0.4);
+    color: #c0392b;
+}
+
+/* Interactive Availability Month-by-Month Calendar */
+.calendar-container {
+    background: #ffffff;
+    border: 1px solid var(--glass-border);
+    border-radius: 18px;
+    padding: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.calendar-title {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--maroon);
+    font-family: var(--font-family);
+    text-transform: capitalize;
+}
+
+.calendar-nav-btn {
+    background: rgba(69, 0, 18, 0.05);
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    color: var(--maroon);
+    font-size: 20px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    outline: none;
+}
+
+.calendar-nav-btn:hover {
+    background: var(--maroon);
+    color: #ffffff;
+    transform: scale(1.05);
+}
+
+.calendar-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+    font-weight: 700;
+    color: var(--text-muted);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+}
+
+.calendar-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+}
+
+.calendar-day {
+    aspect-ratio: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-dark);
+    cursor: pointer;
+    background: #f4f5f7;
+    border: 1.5px solid #e2e2e6;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    user-select: none;
+}
+
+.calendar-day:hover:not(.empty):not(.past) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+    border-color: rgba(69, 0, 18, 0.15);
+}
+
+/* Day Empty & Past modifier styling */
+.calendar-day.empty {
+    background: transparent;
+    cursor: default;
+    pointer-events: none;
+}
+
+.calendar-day.past {
+    background: #f1f2f3;
+    color: #b0b0b0;
+    cursor: not-allowed;
+    opacity: 0.65;
+}
+
+.calendar-day.past .day-indicator-dot {
+    opacity: 0.3;
+}
+
+/* Availability colors and selections */
+.calendar-day.available {
+    background: rgba(46, 204, 113, 0.18);
+    color: #1e874b;
+    border-color: rgba(46, 204, 113, 0.5);
+}
+
+.calendar-day.available:hover:not(.past) {
+    background: rgba(46, 204, 113, 0.15) !important;
+    border-color: #2ecc71 !important;
+    box-shadow: 0 4px 10px rgba(46, 204, 113, 0.15) !important;
+}
+
+.calendar-day.partially-booked {
+    background: rgba(207, 173, 76, 0.28);
+    color: #7a5f12;
+    border-color: rgba(184, 144, 31, 0.65);
+}
+
+.calendar-day.partially-booked:hover:not(.past) {
+    background: rgba(207, 173, 76, 0.25) !important;
+    border-color: var(--gold) !important;
+    box-shadow: 0 4px 10px rgba(207, 173, 76, 0.25) !important;
+    transform: translateY(-2px) scale(1.03);
+}
+
+.calendar-day.fully-booked {
+    background: rgba(231, 76, 60, 0.18);
+    color: #b0271b;
+    border-color: rgba(231, 76, 60, 0.55);
+}
+
+.calendar-day.fully-booked:hover:not(.past) {
+    background: rgba(231, 76, 60, 0.25) !important;
+    border-color: #e74c3c !important;
+    box-shadow: 0 4px 10px rgba(231, 76, 60, 0.25) !important;
+    transform: translateY(-2px) scale(1.03);
+}
+
+/* Dates that are part of the recurring series the user is building */
+.calendar-day.recurring-series {
+    background: rgba(207, 173, 76, 0.32);
+    border-color: var(--gold);
+    box-shadow: inset 0 0 0 2px rgba(184, 144, 31, 0.6);
+    color: #6b531a;
+    font-weight: 800;
+}
+
+.calendar-day.active-selected {
+    border-color: var(--maroon) !important;
+    background: var(--maroon) !important;
+    color: #ffffff !important;
+    font-weight: 700;
+    box-shadow: 0 6px 15px rgba(69, 0, 18, 0.2) !important;
+    transform: scale(1.05) translateY(-2px);
+}
+
+.calendar-day.active-selected .day-indicator-dot {
+    background: #ffffff !important;
+}
+
+/* Cell Indicator Dots */
+.day-indicator-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    position: absolute;
+    bottom: 5px;
+    transition: all 0.2s ease;
+}
+
+.day-indicator-dot.status-available {
+    background-color: #2ecc71;
+}
+
+.day-indicator-dot.status-partial {
+    background-color: var(--gold);
+}
+
+.day-indicator-dot.status-fully {
+    background-color: #e74c3c;
+}
+
+/* Calendar Legend Styling */
+.calendar-legend {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 18px;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    padding-top: 14px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.legend-dot.status-available {
+    background-color: #2ecc71;
+}
+
+.legend-dot.status-partial {
+    background-color: var(--gold);
+}
+
+.legend-dot.status-fully {
+    background-color: #e74c3c;
+}
+
+/* Time Slot Recommendation Panel */
+.time-helper-panel {
+    background: #ffffff;
+    border: 1px solid var(--glass-border);
+    border-radius: 18px;
+    padding: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.time-helper-panel h4 {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--maroon);
+    border-bottom: 2px solid rgba(69, 0, 18, 0.06);
+    padding-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Timeline display */
+.daily-timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 180px;
+    overflow-y: auto;
+    padding-right: 5px;
+}
+
+.daily-timeline::-webkit-scrollbar {
+    width: 6px;
+}
+
+.daily-timeline::-webkit-scrollbar-thumb {
+    background-color: rgba(69, 0, 18, 0.15);
+    border-radius: 10px;
+}
+
+.timeline-empty {
+    font-size: 13px;
+    font-weight: 500;
+    color: #27ae60;
+    padding: 15px;
+    background: rgba(46, 204, 113, 0.06);
+    border: 1px dashed rgba(46, 204, 113, 0.3);
+    border-radius: 10px;
+    text-align: center;
+    line-height: 1.4;
+}
+
+.timeline-block {
+    display: flex;
+    gap: 12px;
+    padding: 10px 12px;
+    background: #f8f9fa;
+    border-left: 4px solid var(--maroon);
+    border-radius: 0 8px 8px 0;
+    font-size: 13px;
+    transition: all 0.2s ease;
+}
+
+.timeline-block:hover {
+    background: rgba(69, 0, 18, 0.03);
+    transform: translateX(2px);
+}
+
+.timeline-time {
+    font-weight: 700;
+    color: var(--maroon);
+    white-space: nowrap;
+}
+
+.timeline-details {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.timeline-title {
+    color: var(--text-dark);
+    font-weight: 700;
+}
+
+.timeline-host {
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+/* Recommended slot pill buttons */
+.recommended-slots-section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    padding-top: 12px;
+}
+
+.recommended-slots-section h5 {
+    margin: 0;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.slots-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.selected-slots-summary {
+    color: var(--maroon);
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.4;
+    text-align: right;
+    max-width: 260px;
+}
+
+.slots-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    width: 100%;
+}
+
+.recommended-slot-pill {
+    background: #ffffff;
+    border: 1.5px solid var(--maroon);
+    color: var(--maroon);
+    padding: 6px 10px;
+    border-radius: 20px;
+    font-family: var(--font-family);
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    outline: none;
+    box-shadow: 0 2px 5px rgba(69, 0, 18, 0.04);
+    width: 100%;
+    min-height: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    line-height: 1.2;
+    white-space: normal;
+    box-sizing: border-box;
+}
+
+.recommended-slot-pill:hover {
+    background: var(--maroon);
+    color: var(--gold);
+    transform: translateY(-1.5px);
+    box-shadow: 0 4px 10px rgba(69, 0, 18, 0.15);
+}
+
+.recommended-slot-pill.active {
+    background: var(--maroon) !important;
+    color: var(--gold) !important;
+    border-color: var(--maroon) !important;
+    box-shadow: 0 4px 12px rgba(69, 0, 18, 0.25) !important;
+    transform: scale(1.02);
+}
+
+.recommended-slot-pill.reserved {
+    background: #f8f9fa !important;
+    border: 1.5px dashed #d1d1d6 !important;
+    color: #8e8e93 !important;
+    cursor: not-allowed !important;
+    box-shadow: none !important;
+    opacity: 0.65;
+    font-weight: 500;
+    pointer-events: none !important;
+}
+
+.recommended-slot-pill:active {
+    transform: translateY(0);
+}
+
+.no-slots-alert {
+    font-size: 12px;
+    color: #e74c3c;
+    font-weight: 600;
+}
+
+/* Custom Alert Warning boxes inside forms */
+.form-warning {
+    background: rgba(231, 76, 60, 0.08);
+    border: 1px solid rgba(231, 76, 60, 0.3);
+    color: #c0392b;
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.4;
+    margin-top: 15px;
+    animation: shake 0.35s ease-in-out;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-4px); }
+    40%, 80% { transform: translateX(4px); }
+}
+
+/* Responsiveness for step 3 layout & calendar panels */
+@media (max-width: 768px) {
+    .step-3-layout {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .step-progress-bar {
+        margin-bottom: 25px;
+    }
+    
+    .step-progress-node .node-text {
+        font-size: 10px;
+        letter-spacing: 0.3px;
+    }
+    
+    .step-progress-connector {
+        margin: -22px 4px 0 4px;
+    }
+
+    .calendar-days {
+        gap: 4px;
+    }
+
+    .slots-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .selected-slots-summary {
+        text-align: left;
+        max-width: none;
+    }
+
+    .calendar-day {
+        font-size: 11px;
+    }
+}
+
+/* Widescreen Fluidity (Desktop & Widescreen Kiosk Targets) */
+@media (min-width: 1200px) {
+    .form-container {
+        max-width: 1100px;
+        width: 90%;
+    }
+}
+@media (min-width: 1400px) {
+    .form-container {
+        max-width: 1250px;
+    }
+}
+
+/* Mobile Stepper & Header Optimization (max-width: 500px) */
+@media (max-width: 500px) {
+    .schedule-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 16px 20px;
+    }
+    .schedule-title {
+        font-size: 22px;
+        line-height: 1.3;
+    }
+    .back-btn {
+        padding: 6px 12px;
+        font-size: 14px;
+    }
+    .step-progress-bar {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 25px;
+        height: 40px;
+    }
+    .step-progress-node {
+        flex: 0 0 auto;
+        width: 36px;
+    }
+    .step-progress-node .node-text {
+        display: none;
+    }
+    .step-progress-connector {
+        flex: 1 1 auto;
+        height: 2px;
+        margin: 0 8px;
+        position: relative;
+        top: 0;
+        transform: none;
+    }
+}
+
+/* Spacing & Paddings on Narrow Mobiles (max-width: 430px) */
+@media (max-width: 430px) {
+    .form-container {
+        padding: 20px 14px;
+    }
+    .calendar-container {
+        padding: 12px;
+    }
+    .calendar-days {
+        gap: 4px;
+    }
+    .calendar-day {
+        font-size: 11px;
+        border-radius: 6px;
+    }
+    .day-indicator-dot {
+        width: 4px;
+        height: 4px;
+        bottom: 2px;
+    }
+    .calendar-weekdays {
+        font-size: 10px;
+        margin-bottom: 6px;
+    }
+    .legend-item {
+        font-size: 9px;
+        gap: 4px;
+    }
+}
+
+/* ========================================================
+   STEP 2 — EVENT DETAILS LAYOUT
+   Flex column replaces form-grid so every field owns its
+   full row and inputs never collapse.
+   ======================================================== */
+.step-2-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+/* Single full-width field row */
+.step-2-fields .form-label {
+    width: 100%;
+}
+
+/* Two-column row for side-by-side fields */
+.step-2-two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+/* Make the Event Title stand out a bit more */
+#event-title {
+    font-size: 15px;
+    padding: 12px 14px;
+}
+
+/* Taller description textarea */
+#event-description {
+    resize: vertical;
+    min-height: 110px;
+}
+
+@media (max-width: 600px) {
+    .step-2-two-col {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ========================================================
+   HOST AUTOFILL SUGGESTION BOX
+   ======================================================== */
+#host-suggestion-box {
+    display: none;
+    margin-top: 8px;
+    padding: 12px 14px;
+    border-radius: 10px;
+    background: rgba(69, 0, 18, 0.04);
+    border: 1.5px dashed #450012;
+    font-size: 13px;
+    color: #333;
+    line-height: 1.5;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
+    user-select: none;
+}
+
+#host-suggestion-box:hover {
+    background: rgba(69, 0, 18, 0.09);
+    border-color: #450012;
+    box-shadow: 0 2px 8px rgba(69, 0, 18, 0.12);
+}
+
+#host-suggestion-box:active {
+    background: rgba(69, 0, 18, 0.14);
+}
+
+.suggestion-hint {
+    display: block;
+    margin-top: 5px;
+    font-size: 11px;
+    color: #888;
+    font-style: italic;
+}
+
+/* ========================================================
+   COURSE CODE + RECURRENCE FORM ELEMENTS
+   ======================================================== */
+
+/* Course code 3-column row */
+.course-code-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.course-fields-block {
+    background: rgba(69, 0, 18, 0.04);
+    border: 1.5px solid rgba(69, 0, 18, 0.15);
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 4px;
+}
+
+/* Live preview of the generated course title */
+.course-title-preview {
+    margin-top: 10px;
+    padding: 10px 14px;
+    background: rgba(207, 173, 76, 0.12);
+    border-left: 3px solid #cfad4c;
+    border-radius: 0 6px 6px 0;
+    font-size: 13px;
+    color: #333;
+}
+
+.course-title-preview .preview-label {
+    display: block;
+    font-size: 11px;
+    color: #777;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Day-of-week pill checkboxes */
+.recur-field-group {
+    margin-bottom: 12px;
+}
+
+.form-label-text {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.day-checkboxes {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.day-checkbox-pill {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 12px;
+    border: 1.5px solid #ccc;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+    user-select: none;
+}
+
+.day-checkbox-pill:has(input:checked) {
+    background: #450012;
+    border-color: #450012;
+    color: #cfad4c;
+}
+
+.day-checkbox-pill input {
+    display: none;
+}
+
+/* Second schedule block */
+.second-schedule-toggle-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 13px;
+    cursor: pointer;
+    margin: 14px 0 0;
+    padding: 10px 12px;
+    background: rgba(69, 0, 18, 0.04);
+    border-radius: 8px;
+    border: 1px dashed rgba(69, 0, 18, 0.25);
+}
+
+.second-schedule-toggle-label input[type="checkbox"] {
+    display: inline;
+    width: 15px;
+    height: 15px;
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+.second-schedule-block {
+    margin-top: 12px;
+    padding: 14px;
+    background: rgba(207, 173, 76, 0.06);
+    border: 1.5px solid rgba(207, 173, 76, 0.4);
+    border-radius: 10px;
+}
+
+.second-schedule-heading {
+    font-size: 14px;
+    font-weight: 700;
+    color: #450012;
+    margin: 0 0 12px;
+}
+
+/* Recurrence count preview */
+.recurrence-preview-box {
+    margin-top: 14px;
+    padding: 12px 16px;
+    background: rgba(69, 0, 18, 0.06);
+    border-radius: 8px;
+    font-size: 13px;
+    color: #450012;
+    font-weight: 600;
+    text-align: center;
+    border: 1px solid rgba(69, 0, 18, 0.15);
+}
+
+/* Batch progress bar */
+.batch-progress-bar-track {
+    width: 100%;
+    height: 10px;
+    background: #eee;
+    border-radius: 5px;
+    overflow: hidden;
+    margin: 16px 0 8px;
+}
+
+.batch-progress-bar-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #450012, #cfad4c);
+    border-radius: 5px;
+    transition: width 0.3s ease;
+}
+
+@media (max-width: 600px) {
+    .course-code-row {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .day-checkboxes {
+        gap: 6px;
+    }
+
+    .day-checkbox-pill {
+        padding: 5px 9px;
+        font-size: 12px;
+    }
+}
+
+/* ========================================================
+   KIOSK MOBILE RESPONSIVE
+   The kiosk is a small landscape tablet, so the side-by-side
+   split layout is kept down to 600px. Only narrower phones
+   slim the bezel and stack the panels vertically.
+   ======================================================== */
+@media (max-width: 600px) {
+    .kiosk-body {
+        align-items: flex-start;
+        /* Keep the dark backdrop and add margin so the bezel never touches the
+           screen edges or the very top. */
+        padding: 16px;
+        box-sizing: border-box;
+    }
+
+    /* Keep a slimmer tablet bezel on mobile so the frame stays visible with a
+       margin around it, instead of bleeding to the screen edges. */
+    .kiosk-tablet-frame {
+        border: 12px solid #555555;
+        border-bottom-width: 12px;
+        border-radius: 26px;
+        box-shadow: 0 14px 34px rgba(0, 0, 0, 0.5);
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+        box-sizing: border-box;
+        flex-direction: column;
+    }
+
+    .kiosk-tablet-frame::after {
+        display: none;
+    }
+
+    /* Stack split-screen vertically */
+    .kiosk-split-screen {
+        flex-direction: column;
+        height: auto;
+    }
+
+    /* Left maroon panel: full width, compact padding */
+    .kiosk-left-panel {
+        width: 100%;
+        min-height: auto;
+        padding: 20px 18px 16px;
+        border-right: none;
+        border-bottom: 3px solid #b8901f;
+    }
+
+    .kiosk-room-header {
+        font-size: 20px;
+        margin-bottom: 12px;
+    }
+
+    .kiosk-current-time-range {
+        font-size: 28px !important;
+    }
+
+    .kiosk-current-title {
+        font-size: 18px !important;
+    }
+
+    .kiosk-current-host {
+        font-size: 13px !important;
+    }
+
+    /* Hide watermark seal on mobile -- too cluttered */
+    .kiosk-logo-watermark {
+        display: none;
+    }
+
+    /* Clock footer: tighten up */
+    .kiosk-left-footer {
+        margin-top: 14px;
+    }
+
+    .kiosk-clock-day {
+        font-size: 12px !important;
+    }
+
+    .kiosk-clock-time {
+        font-size: 18px !important;
+    }
+
+    /* Exit/home button: keep accessible */
+    .kiosk-exit-btn {
+        font-size: 14px;
+        padding: 6px 10px;
+    }
+
+    /* Right silver panel: full width */
+    .kiosk-right-panel {
+        width: 100%;
+        padding: 18px;
+        min-height: 280px;
+    }
+
+    .kiosk-next-header {
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+
+    .kiosk-next-item {
+        padding: 10px 12px;
+        margin-bottom: 8px;
+    }
+
+    .kiosk-next-time {
+        font-size: 12px;
+    }
+
+    .kiosk-next-details {
+        font-size: 14px;
+    }
+
+    .kiosk-next-host {
+        font-size: 12px;
+    }
+
+    .kiosk-reserve-cta {
+        font-size: 14px;
+        padding: 12px;
+        margin-top: 14px;
+    }
+
+    /* QR view on mobile */
+    .kiosk-qr-panel {
+        padding: 20px 18px;
+    }
+
+    .kiosk-qr-header {
+        font-size: 16px;
+    }
+
+    .kiosk-qrcode-container img {
+        width: 150px !important;
+        height: 150px !important;
+    }
+
+    .kiosk-qr-instruction {
+        font-size: 13px;
+    }
+
+    /* Admin setup screen on mobile */
+    .kiosk-admin-setup {
+        padding: 20px 16px;
+    }
+
+    .kiosk-admin-title {
+        font-size: 20px;
+    }
+
+    .kiosk-admin-desc {
+        font-size: 13px;
+    }
+
+    .kiosk-filter-pills {
+        gap: 6px;
+    }
+
+    .kiosk-filter-pill {
+        font-size: 11px;
+        padding: 5px 10px;
+    }
+
+    .kiosk-room-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+    }
+
+    .kiosk-room-btn {
+        font-size: 12px;
+        padding: 10px 6px;
+    }
+}
+
+@media (max-width: 430px) {
+    .kiosk-room-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .kiosk-current-time-range {
+        font-size: 22px !important;
+    }
+}
+
+/* Short landscape kiosk screens (the real kiosk is wide but not tall):
+   compress the bezel, text, QR, and button so the whole display fits without
+   vertical scrolling. Only the Next Events list scrolls on its own. */
+@media (max-height: 520px) {
+    /* Slimmer bezel reclaims vertical space */
+    .kiosk-tablet-frame {
+        border-width: 12px;
+        border-bottom-width: 14px;
+        border-radius: 22px;
+    }
+    .kiosk-tablet-frame::after { display: none; }
+
+    /* Tighter panel padding */
+    .kiosk-left-panel,
+    .kiosk-right-panel {
+        padding: 14px 18px;
+    }
+
+    /* Left panel: shrink text and spacing relative to viewport height */
+    .kiosk-room-header {
+        font-size: clamp(16px, 4.6vh, 26px) !important;
+        margin: 0 0 8px 0;
+    }
+    .kiosk-current-info {
+        margin-bottom: 10px;
+    }
+    .kiosk-current-time-range {
+        font-size: clamp(18px, 6vh, 34px) !important;
+        margin: 0 0 4px 0;
+    }
+    .kiosk-current-title {
+        font-size: clamp(18px, 6vh, 34px) !important;
+        margin: 0 0 4px 0;
+    }
+    .kiosk-current-host {
+        font-size: clamp(12px, 3.2vh, 18px) !important;
+    }
+    .kiosk-clock-day {
+        font-size: clamp(10px, 2.4vh, 14px) !important;
+    }
+    .kiosk-clock-time {
+        font-size: clamp(13px, 3.2vh, 18px) !important;
+    }
+
+    /* Smaller QR so it fits alongside the text and clock without scrolling */
+    #kiosk-available-qr-image,
+    .kiosk-empty-qr-img {
+        width: clamp(86px, 28vh, 130px) !important;
+        height: clamp(86px, 28vh, 130px) !important;
+    }
+    #kiosk-available-qr-container {
+        margin-top: 10px !important;
+    }
+
+    /* Right panel: compact header and button so at least one event stays visible */
+    .kiosk-next-header {
+        font-size: clamp(16px, 4.6vh, 26px) !important;
+        margin: 0 0 8px 0;
+    }
+    .kiosk-reserve-cta {
+        font-size: clamp(13px, 3.2vh, 18px) !important;
+        padding: 10px;
+        margin-top: 10px;
+    }
+    .kiosk-next-time { font-size: clamp(11px, 2.6vh, 14px); }
+    .kiosk-next-details { font-size: clamp(12px, 3vh, 16px); }
+    .kiosk-next-host { font-size: clamp(10px, 2.4vh, 13px); }
+}

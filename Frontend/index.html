@@ -6,17 +6,20 @@
     <title>WTAMU Classroom Schedule System</title>
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/x-icon" href="Images/icon.png">
+    <script src="services/api.js" defer></script>
     <script src="script.js" defer></script>
 </head>
-<body>
-    <div class="div1">
-        <h1 class="center">Welcome to the WTAMU Classroom Schedule System!</h1>
+<body class="home-page">
+    <div class="home-wrapper">
+        <div class="home-card">
+            <img class="home-seal" src="Images/West_Texas_A&M_University_seal.svg.png" alt="WTAMU Seal">
+            <h1 class="home-title">Welcome to the WTAMU Classroom Schedule System</h1>
+            <p class="home-subtitle">Schedule rooms and view active campus reservations instantly.</p>
+            <div class="home-actions">
+                <button class="home-btn primary" onclick="makeAReservation()">Schedule a Reservation</button>
+                <button class="home-btn secondary" onclick="viewSchedule()">View Reservations Dashboard</button>
+            </div>
+        </div>
     </div>
-    <div class="container">
-        <input type="button" value="Make a Reservation" onclick=makeAReservation()>
-        <input type="button" value="View Today's Schedule" onclick=viewSchedule()>
-    </div>
-    
-
 </body>
 </html>

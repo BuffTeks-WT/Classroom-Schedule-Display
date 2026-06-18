@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scheduled Reservations | WTAMU</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="Images/icon.png">
+    <script src="services/api.js" defer></script>
+    <script src="schedule.js" defer></script>
+</head>
+<body class="schedule-page">
+
+    <header class="schedule-header">
+        <button class="back-btn" onclick="window.location.href='index.html'">&#8592; Back</button>
+        <h1 class="schedule-title">Scheduled Reservations</h1>
+    </header>
+
+    <main class="schedule-main">
+        <div class="dashboard-layout">
+            <!-- Sidebar for Filters & Controls -->
+            <aside class="dashboard-sidebar" id="dashboard-sidebar">
+                <div class="sidebar-header">
+                    <h2>⚙️ Filters & Sort</h2>
+                    <span class="close-sidebar-btn" id="close-sidebar">&times;</span>
+                </div>
+                <div class="filter-fields-container">
+                    <label class="filter-item">
+                        <span>Date</span>
+                        <input type="date" id="filter-date">
+                    </label>
+                    <label class="filter-item">
+                        <span>Availability</span>
+                        <select id="filter-availability">
+                            <option value="all">All Statuses</option>
+                            <option value="confirmed">Confirmed</option>
+                            <option value="pending">Pending</option>
+                            <option value="cancelled">Cancelled</option>
+                        </select>
+                    </label>
+                    <label class="filter-item">
+                        <span>Room</span>
+                        <input type="text" id="filter-room" placeholder="Room number">
+                    </label>
+                    <label class="filter-item">
+                        <span>Host</span>
+                        <input type="text" id="filter-host" placeholder="Host name">
+                    </label>
+                    <label class="filter-item">
+                        <span>Sort By</span>
+                        <select id="filter-sort">
+                            <option value="chronological">Chronological (Soonest First)</option>
+                            <option value="recently-scheduled">Recently Scheduled</option>
+                        </select>
+                    </label>
+                    <label class="filter-checkbox-item">
+                        <input type="checkbox" id="filter-show-past">
+                        <span>Show Past Reservations</span>
+                    </label>
+                </div>
+                <div class="filter-actions">
+                    <button id="clear-filters" class="btn-clear">Clear All</button>
+                    <button id="apply-filters" class="btn-apply">Apply Filters</button>
+                </div>
+            </aside>
+
+            <!-- Main Content Area -->
+            <div class="dashboard-main-content">
+                <div class="dashboard-toolbar">
+                    <button id="mobile-filter-toggle" class="mobile-filter-btn">⚙️ Show Filters</button>
+                </div>
+
+                <section class="schedule-content">
+                    <div id="loading" class="loading-state">
+                        <div class="spinner"></div>
+                        <p>Loading reservations...</p>
+                    </div>
+
+                    <div id="error-message" class="error-state" style="display: none;">
+                        <p>Could not load reservations. The API may be unreachable.</p>
+                        <button class="retry-btn" onclick="location.reload()">Try Again</button>
+                    </div>
+
+                    <div id="reservations-container" class="reservations-grid"></div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <!-- Details and Edit Modal Overlay -->
+    <div id="details-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-card">
+            <span class="close-modal-btn" onclick="closeModal()">&times;</span>
+            <div id="modal-view-mode">
+                <div class="modal-header-section">
+                    <h2 id="modal-title" class="card-title">Event Title</h2>
+                    <span id="modal-status" class="card-status">Confirmed</span>
+                </div>
+                <div class="modal-grid-body">
+                    <!-- Host Info Card -->
+                    <div class="modal-grid-card">
+                        <h3>👤 Host Information</h3>
+                        <p><strong>Name:</strong> <span id="modal-host"></span></p>
+                        <p><strong>Role:</strong> <span id="modal-role"></span></p>
+                        <p><strong>Email:</strong> <span id="modal-email"></span></p>
+                    </div>
+
+                    <!-- Room/Building stats Card -->
+                    <div class="modal-grid-card">
+                        <h3>📍 Classroom Details</h3>
+                        <p><strong>Room:</strong> <span id="modal-room"></span></p>
+                        <p><strong>Building:</strong> <span id="modal-building"></span></p>
+                        <p><strong>Equipment:</strong> <span id="modal-equipment"></span></p>
+                    </div>
+
+                    <!-- Time & Logistics Card -->
+                    <div class="modal-grid-card full-width">
+                        <h3>⏰ Time & Logistics</h3>
+                        <div class="logistics-row">
+                            <p><strong>Schedule:</strong> <span id="modal-time"></span></p>
+                            <p><strong>Expected Guests:</strong> <span id="modal-guests"></span> people</p>
+                        </div>
+                    </div>
+
+                    <!-- Description (Highlight Card) -->
+                    <div class="modal-grid-card highlight-card full-width">
+                        <h3>📝 Event Description</h3>
+                        <p id="modal-description" class="card-description"></p>
+                    </div>
+
+                    <!-- Special Requirements (Highlight Card) -->
+                    <div class="modal-grid-card highlight-card full-width">
+                        <h3>⚠️ Special Requirements</h3>
+                        <p id="modal-requirement" class="card-description"></p>
+                    </div>
+                </div>
+                <div class="form-actions" style="margin-top: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
+                    <button id="modal-kiosk-btn" class="cancel-form-btn view-kiosk-btn">View Kiosk</button>
+                    <button id="modal-preview-btn" class="cancel-form-btn preview-event-btn">Preview Event</button>
+                    <button class="submit-form-btn edit-details-btn" onclick="toggleEditMode(true)">Edit Details</button>
+                    <button class="cancel-form-btn delete-btn" onclick="triggerDelete()">Cancel Reservation</button>
+                </div>
+            </div>
+
+            <div id="modal-edit-mode" style="display: none;">
+                <h2>✏️ Edit Reservation</h2>
+                <form id="edit-reservation-form" onsubmit="submitEdit(event)" novalidate>
+                    <label class="form-label">
+                        Event Title *
+                        <input type="text" id="edit-title" required maxlength="150">
+                    </label>
+                    <label class="form-label">
+                        Host Name *
+                        <input type="text" id="edit-host-name" required maxlength="100">
+                    </label>
+                    <label class="form-label">
+                        Host Email *
+                        <input type="email" id="edit-host-email" required maxlength="150">
+                    </label>
+                    <label class="form-label">
+                        Host Role *
+                        <select id="edit-host-role" required>
+                            <option value="Faculty">Faculty / Professor</option>
+                            <option value="Student">Student</option>
+                            <option value="Staff">Staff</option>
+                            <option value="Organization">Student Organization</option>
+                        </select>
+                    </label>
+                    <label class="form-label">
+                        Event Description
+                        <textarea id="edit-description" rows="2"></textarea>
+                    </label>
+                    <label class="form-label">
+                        Special Requirements
+                        <input type="text" id="edit-requirement" maxlength="255">
+                    </label>
+                    <label class="form-label">
+                        Expected Participants *
+                        <input type="number" id="edit-guests" required min="1">
+                    </label>
+                    <label class="form-label">
+                        Select Classroom *
+                        <select id="edit-room-id" required>
+                            <option value="1">CC 101 (Cap: 30)</option>
+                            <option value="2">CC 102 (Cap: 28)</option>
+                            <option value="3">CC 103 (Cap: 22)</option>
+                            <option value="4">CC 210 (Cap: 35)</option>
+                            <option value="5">ILC 214 (Cap: 40)</option>
+                            <option value="6">ILC 305 (Cap: 25)</option>
+                            <option value="7">ILC 320 (Cap: 30)</option>
+                            <option value="8">AG 302 (Cap: 20)</option>
+                            <option value="9">AG 303 (Cap: 18)</option>
+                            <option value="10">JBK 118 (Cap: 100)</option>
+                            <option value="11">JBK 120 (Cap: 80)</option>
+                            <option value="12">MMNH 105 (Cap: 30)</option>
+                            <option value="13">MMNH 106 (Cap: 28)</option>
+                            <option value="14">BBC 304 (Cap: 55)</option>
+                            <option value="15">ECS 201 (Cap: 28)</option>
+                        </select>
+                    </label>
+                    <label class="form-label">
+                        Start Time *
+                        <input type="datetime-local" id="edit-starttime" required>
+                    </label>
+                    <label class="form-label">
+                        End Time *
+                        <input type="datetime-local" id="edit-endtime" required>
+                    </label>
+
+                    <section class="edit-availability-section">
+                        <div id="edit-classroom-availability-alert" class="classroom-availability-alert">
+                            Select a classroom to review availability before saving changes.
+                        </div>
+
+                        <div class="edit-availability-grid">
+                            <div class="calendar-container edit-calendar-container" id="edit-classroom-calendar-section" style="display: none;">
+                                <div class="calendar-header">
+                                    <button type="button" id="edit-prev-month-btn" class="calendar-nav-btn">&lsaquo;</button>
+                                    <span id="edit-calendar-month-year" class="calendar-title">Calendar</span>
+                                    <button type="button" id="edit-next-month-btn" class="calendar-nav-btn">&rsaquo;</button>
+                                </div>
+
+                                <div class="calendar-weekdays">
+                                    <span>SU</span><span>MO</span><span>TU</span><span>WE</span><span>TH</span><span>FR</span><span>SA</span>
+                                </div>
+
+                                <div class="calendar-days" id="edit-calendar-days-grid"></div>
+
+                                <div class="calendar-legend">
+                                    <span><i class="legend-dot status-available"></i> Available</span>
+                                    <span><i class="legend-dot status-partial"></i> Reserved</span>
+                                    <span><i class="legend-dot status-fully"></i> Unavailable</span>
+                                </div>
+                            </div>
+
+                            <div class="time-helper-panel edit-time-helper-panel" id="edit-time-helper-panel" style="display: none;">
+                                <h4 id="edit-time-helper-selected-date">Daily Schedule</h4>
+                                <div class="daily-timeline" id="edit-daily-timeline-container"></div>
+
+                                <div class="recommended-slots-section" id="edit-recommended-slots-section">
+                                    <div class="slots-section-header">
+                                        <h5>Available 30-minute time slots</h5>
+                                        <span id="edit-selected-slots-summary">Select adjacent blocks to update this reservation.</span>
+                                    </div>
+                                    <div class="slots-grid" id="edit-recommended-slots-container"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <label class="form-label">
+                        Reservation Status *
+                        <select id="edit-status" required>
+                            <option value="confirmed">confirmed</option>
+                            <option value="pending">pending</option>
+                            <option value="cancelled">cancelled</option>
+                        </select>
+                    </label>
+
+                    <div id="edit-validation-warning" class="form-warning" style="display: none;"></div>
+
+                    <div class="form-actions" style="margin-top: 20px;">
+                        <button type="button" class="cancel-form-btn" onclick="toggleEditMode(false)">Cancel</button>
+                        <button type="submit" class="submit-form-btn">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom cancel-confirmation dialog (replaces the native confirm alert) -->
+    <div id="confirm-modal" class="confirm-overlay" style="display: none;">
+        <div class="confirm-card" role="alertdialog" aria-modal="true" aria-labelledby="confirm-title" aria-describedby="confirm-message">
+            <div class="confirm-icon">&#9888;</div>
+            <h3 id="confirm-title">Cancel Reservation?</h3>
+            <p id="confirm-message">Are you sure you want to cancel this reservation?</p>
+            <div class="confirm-actions">
+                <button id="confirm-no" type="button" class="confirm-btn confirm-no">Keep Reservation</button>
+                <button id="confirm-yes" type="button" class="confirm-btn confirm-yes">Yes, Cancel It</button>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
