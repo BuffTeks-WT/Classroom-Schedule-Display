@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Make A Reservation &mdash; WTAMU</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="Images/icon.png">
+    <script src="services/api.js" defer></script>
+    <script src="reservation.js" defer></script>
+</head>
+<body class="schedule-page">
+
+    <header class="schedule-header">
+        <button class="back-btn" onclick="window.location.href='index.html'">&#8592; Back</button>
+        <h1 class="schedule-title">Request Classroom Reservation</h1>
+    </header>
+
+    <main class="schedule-main">
+        <div class="form-container">
+
+            <!-- Step Tracker Header -->
+            <div class="step-progress-bar">
+                <div class="step-progress-node active" id="node-1">
+                    <span class="node-number">1</span>
+                    <span class="node-text">Host Details</span>
+                </div>
+                <div class="step-progress-connector" id="connector-1"></div>
+                <div class="step-progress-node" id="node-2">
+                    <span class="node-number">2</span>
+                    <span class="node-text">Event Details</span>
+                </div>
+                <div class="step-progress-connector" id="connector-2"></div>
+                <div class="step-progress-node" id="node-3">
+                    <span class="node-number">3</span>
+                    <span class="node-text">Select Schedule</span>
+                </div>
+            </div>
+
+            <form id="reservation-form" onsubmit="submitReservation(event)" novalidate>
+
+                <!-- STEP 1: HOST INFORMATION -->
+                <div id="step-1" class="wizard-step active">
+                    <div class="form-section">
+                        <h3>&#128100; Host Information</h3>
+                        <div class="form-grid">
+                            <label class="form-label" style="position: relative;">
+                                Full Name *
+                                <input type="text" id="host-name" required placeholder="Dr. Carl Zhang" maxlength="100" autocomplete="off">
+                                <div id="host-suggestion-box">
+                                    &#128101; Are you referring to <strong><span id="suggested-host-name"></span></strong> (<span id="suggested-host-email"></span>)?
+                                    <span class="suggestion-hint">Click anywhere here to autofill their details.</span>
+                                </div>
+                            </label>
+                            <label class="form-label">
+                                WTAMU Email *
+                                <input type="email" id="host-email" required placeholder="czhang@wtamu.edu" maxlength="150">
+                            </label>
+                            <label class="form-label">
+                                Your Role *
+                                <select id="host-role" required>
+                                    <option value="" disabled selected>Select Role</option>
+                                    <option value="Faculty">Faculty / Professor</option>
+                                    <option value="Student">Student</option>
+                                    <option value="Staff">Staff</option>
+                                    <option value="Organization">Student Organization (BuffTeks, etc.)</option>
+                                </select>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="cancel-form-btn" onclick="window.location.href='index.html'">Cancel</button>
+                        <button type="button" class="submit-form-btn" onclick="goToNextStep(1)">Next Step &rarr;</button>
+                    </div>
+                </div>
+
+                <!-- STEP 2: EVENT DETAILS -->
+                <div id="step-2" class="wizard-step" style="display: none;">
+                    <div class="form-section">
+                        <h3>&#128226; Event Details</h3>
+                        <div class="step-2-fields">
+
+                            <!-- Reservation Type (always shown) -->
+                            <label class="form-label">
+                                Reservation Type *
+                                <select id="event-type" required onchange="handleEventTypeChange()">
+                                    <option value="" disabled selected>Select the type of reservation</option>
+                                    <optgroup label="Academic">
+                                        <option value="course-lecture">Course &mdash; Lecture / Seminar</option>
+                                        <option value="course-lab">Course &mdash; Lab / Studio / Discussion</option>
+                                    </optgroup>
+                                    <optgroup label="Campus Use">
+                                        <option value="org-event">Student Organization Event</option>
+                                        <option value="meeting">Faculty / Staff Meeting</option>
+                                        <option value="study-group">Student Study Group / Open Use</option>
+                                        <option value="other">Other</option>
+                                    </optgroup>
+                                </select>
+                            </label>
+
+                            <!-- Course Fields (course types only) -->
+                            <div id="course-fields" class="course-fields-block" style="display: none;">
+                                <div class="course-code-row">
+                                    <label class="form-label">
+                                        Dept *
+                                        <input type="text" id="course-dept" placeholder="CIDM" maxlength="6"
+                                            oninput="this.value=this.value.toUpperCase(); updateCourseTitlePreview()">
+                                    </label>
+                                    <label class="form-label">
+                                        Course # *
+                                        <input type="text" id="course-number" placeholder="3312" maxlength="4"
+                                            oninput="updateCourseTitlePreview()">
+                                    </label>
+                                    <label class="form-label">
+                                        Section *
+                                        <input type="text" id="course-section" placeholder="70" maxlength="3"
+                                            oninput="updateCourseTitlePreview()">
+                                    </label>
+                                </div>
+                                <label class="form-label">
+                                    Course Name *
+                                    <input type="text" id="course-name" placeholder="Advanced Business Programming" maxlength="150"
+                                        oninput="updateCourseTitlePreview()">
+                                </label>
+                                <div id="course-title-preview" class="course-title-preview" style="display: none;">
+                                    <span class="preview-label">Reservation title will be:</span>
+                                    <strong id="course-title-preview-text"></strong>
+                                </div>
+                            </div>
+
+                            <!-- Event Title (non-course types) -->
+                            <label class="form-label" id="event-title-field">
+                                Event Title *
+                                <input type="text" id="event-title" placeholder="BuffTeks Weekly Hackathon" maxlength="150">
+                            </label>
+
+                            <!-- Event Description (non-course types) -->
+                            <label class="form-label" id="event-description-field">
+                                Event Description
+                                <textarea id="event-description" placeholder="A brief description of your event, meeting, or workshop..." rows="5"></textarea>
+                            </label>
+
+                            <!-- Special Requirements + Participants always shown, side by side -->
+                            <div class="step-2-two-col">
+                                <label class="form-label">
+                                    Special Requirements / Equipment
+                                    <input type="text" id="event-requirement" placeholder="Projector, Microphones, Audio System" maxlength="255">
+                                </label>
+                                <label class="form-label">
+                                    Expected Participants *
+                                    <input type="number" id="event-guests" required min="1" placeholder="25">
+                                </label>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="cancel-form-btn" onclick="goToPrevStep(2)">&larr; Back</button>
+                        <button type="button" class="submit-form-btn" onclick="goToNextStep(2)">Next Step &rarr;</button>
+                    </div>
+                </div>
+
+                <!-- STEP 3: CLASSROOM & SCHEDULE WIZARD -->
+                <div id="step-3" class="wizard-step" style="display: none;">
+                    <div class="form-section">
+                        <h3>&#128205; Classroom &amp; Time Selection</h3>
+                        <div class="step-3-layout">
+
+                            <!-- Left Column: inputs -->
+                            <div class="step-3-inputs">
+                                <div class="form-grid-single">
+
+                                    <label class="form-label">
+                                        Select Classroom *
+                                        <select id="room-id" required>
+                                            <option value="" disabled selected>Select Classroom</option>
+                                            <optgroup label="Classroom Center (CC)">
+                                                <option value="1">CC 101 (Cap: 30) - Projector, Whiteboard</option>
+                                                <option value="2">CC 102 (Cap: 28) - Projector</option>
+                                                <option value="3">CC 103 (Cap: 22) - Whiteboard</option>
+                                                <option value="4">CC 210 (Cap: 35) - Projector</option>
+                                            </optgroup>
+                                            <optgroup label="Interactive Learning Center (ILC)">
+                                                <option value="5">ILC 214 (Cap: 40) - SmartBoard</option>
+                                                <option value="6">ILC 305 (Cap: 25) - SmartBoard, Mic</option>
+                                                <option value="7">ILC 320 (Cap: 30) - Projector, Speakers</option>
+                                            </optgroup>
+                                            <optgroup label="Jack B. Kelley Student Center (JBK)">
+                                                <option value="10">JBK 118 (Cap: 100) - Stage, Mics, Projector</option>
+                                                <option value="11">JBK 120 (Cap: 80) - Projector, Speakers</option>
+                                            </optgroup>
+                                            <optgroup label="Agriculture Sciences Complex (AG)">
+                                                <option value="8">AG 302 (Cap: 20) - Labs, Computers</option>
+                                                <option value="9">AG 303 (Cap: 18) - Lab Tables</option>
+                                            </optgroup>
+                                            <optgroup label="Mary Moody Northen Hall (MMNH)">
+                                                <option value="12">MMNH 105 (Cap: 30) - Sound System</option>
+                                                <option value="13">MMNH 106 (Cap: 28) - Projector</option>
+                                            </optgroup>
+                                            <optgroup label="Buff Business Center (BBC)">
+                                                <option value="14">BBC 304 (Cap: 55) - Dual Screens, Speakers</option>
+                                            </optgroup>
+                                            <optgroup label="Engineering &amp; Computer Science Building (ECS)">
+                                                <option value="15">ECS 201 (Cap: 28) - Computers, Projector</option>
+                                            </optgroup>
+                                        </select>
+                                    </label>
+
+                                    <label class="form-label">
+                                        Building Name (Display only)
+                                        <input type="text" id="event-location" placeholder="e.g. Jack B. Kelley Student Center" readonly>
+                                    </label>
+
+                                    <!-- Schedule Type Toggle -->
+                                    <label class="form-label">
+                                        Schedule Type *
+                                        <select id="schedule-type" onchange="handleScheduleTypeChange()">
+                                            <option value="one-time">One-Time Event</option>
+                                            <option value="recurring">Recurring (Course / Weekly)</option>
+                                        </select>
+                                    </label>
+
+                                    <!-- One-Time: datetime pickers -->
+                                    <div id="one-time-schedule">
+                                        <label class="form-label">
+                                            Start Date &amp; Time *
+                                            <input type="datetime-local" id="event-starttime">
+                                        </label>
+                                        <label class="form-label">
+                                            End Date &amp; Time *
+                                            <input type="datetime-local" id="event-endtime">
+                                        </label>
+                                    </div>
+
+                                                                        <!-- Recurring Schedule -->
+                                    <div id="recurring-schedule" style="display: none;">
+                                        <div class="recur-field-group">
+                                            <span class="form-label-text">Days of Week *</span>
+                                            <div class="day-checkboxes">
+                                                <label class="day-checkbox-pill"><input type="checkbox" value="1" name="recur-day" onchange="updateRecurrencePreview()"> Mon</label>
+                                                <label class="day-checkbox-pill"><input type="checkbox" value="2" name="recur-day" onchange="updateRecurrencePreview()"> Tue</label>
+                                                <label class="day-checkbox-pill"><input type="checkbox" value="3" name="recur-day" onchange="updateRecurrencePreview()"> Wed</label>
+                                                <label class="day-checkbox-pill"><input type="checkbox" value="4" name="recur-day" onchange="updateRecurrencePreview()"> Thu</label>
+                                                <label class="day-checkbox-pill"><input type="checkbox" value="5" name="recur-day" onchange="updateRecurrencePreview()"> Fri</label>
+                                            </div>
+                                        </div>
+                                        <label class="form-label">
+                                            Class Start Time *
+                                            <input type="time" id="recur-start-time" onchange="updateRecurrencePreview()">
+                                        </label>
+                                        <label class="form-label">
+                                            Class End Time *
+                                            <input type="time" id="recur-end-time" onchange="updateRecurrencePreview()">
+                                        </label>
+                                        <label class="form-label">
+                                            Semester Start Date *
+                                            <input type="date" id="semester-start" onchange="updateRecurrencePreview()">
+                                        </label>
+                                        <label class="form-label">
+                                            Semester End Date *
+                                            <input type="date" id="semester-end" onchange="updateRecurrencePreview()">
+                                        </label>
+
+                                        <label class="second-schedule-toggle-label">
+                                            <input type="checkbox" id="add-second-schedule" onchange="handleSecondScheduleToggle()">
+                                            Add a second schedule (e.g. lab or discussion with different days / times)
+                                        </label>
+
+                                        <div id="second-schedule-section" style="display: none;" class="second-schedule-block">
+                                            <h4 class="second-schedule-heading">Second Schedule &mdash; Lab / Discussion</h4>
+                                            <div class="recur-field-group">
+                                                <span class="form-label-text">Days of Week</span>
+                                                <div class="day-checkboxes">
+                                                    <label class="day-checkbox-pill"><input type="checkbox" value="1" name="recur-day-2" onchange="updateRecurrencePreview()"> Mon</label>
+                                                    <label class="day-checkbox-pill"><input type="checkbox" value="2" name="recur-day-2" onchange="updateRecurrencePreview()"> Tue</label>
+                                                    <label class="day-checkbox-pill"><input type="checkbox" value="3" name="recur-day-2" onchange="updateRecurrencePreview()"> Wed</label>
+                                                    <label class="day-checkbox-pill"><input type="checkbox" value="4" name="recur-day-2" onchange="updateRecurrencePreview()"> Thu</label>
+                                                    <label class="day-checkbox-pill"><input type="checkbox" value="5" name="recur-day-2" onchange="updateRecurrencePreview()"> Fri</label>
+                                                </div>
+                                            </div>
+                                            <label class="form-label">
+                                                Lab Start Time
+                                                <input type="time" id="recur-start-time-2" onchange="updateRecurrencePreview()">
+                                            </label>
+                                            <label class="form-label">
+                                                Lab End Time
+                                                <input type="time" id="recur-end-time-2" onchange="updateRecurrencePreview()">
+                                            </label>
+                                        </div>
+
+                                        <div id="recurrence-preview" class="recurrence-preview-box" style="display: none;"></div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <!-- Right Column: interactive calendar & timeline helper -->
+                            <div class="step-3-calendar-panel">
+                                <div class="classroom-availability-alert" id="classroom-availability-alert">
+                                    Select a classroom to view its interactive availability calendar.
+                                </div>
+
+                                <div class="calendar-container" id="classroom-calendar-section" style="display: none;">
+                                    <div class="calendar-header">
+                                        <button type="button" id="prev-month-btn" class="calendar-nav-btn">&lsaquo;</button>
+                                        <span id="calendar-month-year" class="calendar-title">June 2026</span>
+                                        <button type="button" id="next-month-btn" class="calendar-nav-btn">&rsaquo;</button>
+                                    </div>
+                                    <div class="calendar-weekdays">
+                                        <div>Su</div><div>Mo</div><div>Tu</div><div>We</div><div>Th</div><div>Fr</div><div>Sa</div>
+                                    </div>
+                                    <div class="calendar-days" id="calendar-days-grid"></div>
+                                    <div class="calendar-legend">
+                                        <span class="legend-item"><span class="legend-dot status-available"></span>Available</span>
+                                        <span class="legend-item"><span class="legend-dot status-partial"></span>Reserved</span>
+                                        <span class="legend-item"><span class="legend-dot status-fully"></span>Unavailable</span>
+                                    </div>
+                                </div>
+
+                                <div class="time-helper-panel" id="time-helper-panel" style="display: none;">
+                                    <h4 id="time-helper-selected-date">Daily Schedule</h4>
+                                    <div class="daily-timeline" id="daily-timeline-container"></div>
+                                    <div class="recommended-slots-section" id="recommended-slots-section">
+                                        <div class="slots-section-header">
+                                            <h5>Available 30-Minute Time Slots</h5>
+                                            <span id="selected-slots-summary" class="selected-slots-summary">Select adjacent blocks to build your reservation.</span>
+                                        </div>
+                                        <div class="slots-grid" id="recommended-slots-container"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div id="validation-warning" class="form-warning" style="display: none;"></div>
+
+                    <div class="form-actions">
+                        <button type="button" class="cancel-form-btn" onclick="goToPrevStep(3)">&larr; Back</button>
+                        <button type="submit" class="submit-form-btn submit-booking-btn">Confirm Reservation</button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </main>
+
+    <!-- One-Time Success Modal -->
+    <div id="success-overlay" class="modal-overlay" style="display: none;">
+        <div class="modal-card" style="text-align: center;">
+            <div class="success-icon">&#10003;</div>
+            <h2>Reservation Confirmed!</h2>
+            <p>Your classroom reservation has been submitted and registered successfully.</p>
+            <button class="retry-btn" onclick="window.location.href='schedule.html'">View Schedule</button>
+        </div>
+    </div>
+
+    <!-- Batch Progress Modal -->
+    <div id="batch-progress-overlay" class="modal-overlay" style="display: none;">
+        <div class="modal-card" style="text-align: center; max-width: 420px;">
+            <h2 id="batch-progress-title">Submitting Reservations...</h2>
+            <div class="batch-progress-bar-track">
+                <div id="batch-progress-bar" class="batch-progress-bar-fill"></div>
+            </div>
+            <p id="batch-progress-text" style="margin: 12px 0 4px; font-weight: bold; color: #450012;"></p>
+            <p id="batch-progress-status" style="font-size: 13px; color: #666; margin: 0;"></p>
+        </div>
+    </div>
+
+    <!-- Batch Success Modal -->
+    <div id="batch-success-overlay" class="modal-overlay" style="display: none;">
+        <div class="modal-card" style="text-align: center;">
+            <div class="success-icon">&#10003;</div>
+            <h2>All Reservations Scheduled!</h2>
+            <p id="batch-success-message"></p>
+            <button class="retry-btn" onclick="window.location.href='schedule.html'">View Schedule</button>
+        </div>
+    </div>
+
+</body>
+</html>

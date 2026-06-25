@@ -3,10 +3,5 @@ function makeAReservation() {
 }
 
 function viewSchedule() {
-    alert("View Schedule functionality is not yet implemented.");
+    window.location.href = "schedule.html";
 }
-
-function goHome(){
-    window.location.href = "index.html";
-}
-

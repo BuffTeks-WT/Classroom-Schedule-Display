@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classroom Kiosk — WTAMU</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="Images/icon.png">
+    <script src="services/api.js" defer></script>
+    <script src="kiosk.js" defer></script>
+</head>
+<body class="kiosk-body">
+
+    <!-- Tablet Kiosk Outer Bezel Frame -->
+    <div class="kiosk-tablet-frame">
+        
+        <!-- 1. Admin Setup Screen (Default if no classroom is bound) -->
+        <div id="setup-view" class="kiosk-admin-setup" style="display: none;">
+            <div style="text-align: center;">
+                <h1 class="kiosk-admin-title">WTAMU Classroom Kiosk</h1>
+                <p class="kiosk-admin-desc">Select a Classroom to Bind to this Device</p>
+                <div style="margin-top: -10px; margin-bottom: 25px;">
+                    <button class="kiosk-exit-setup-btn" onclick="window.location.href='index.html'">Exit Setup Utility</button>
+                </div>
+            </div>
+            
+            <!-- Campus Building Filters (Scalability check) -->
+            <div class="kiosk-filter-pills">
+                <button class="kiosk-filter-pill active" data-filter="all">All Buildings</button>
+                <button class="kiosk-filter-pill" data-filter="CC">Classroom Center (CC)</button>
+                <button class="kiosk-filter-pill" data-filter="ILC">Interactive Learning (ILC)</button>
+                <button class="kiosk-filter-pill" data-filter="JBK">Jack B. Kelley (JBK)</button>
+                <button class="kiosk-filter-pill" data-filter="AG">Agriculture Sciences (AG)</button>
+                <button class="kiosk-filter-pill" data-filter="MMNH">Northen Hall (MMNH)</button>
+                <button class="kiosk-filter-pill" data-filter="BBC">Buff Business (BBC)</button>
+                <button class="kiosk-filter-pill" data-filter="ECS">Engineering & CS (ECS)</button>
+            </div>
+            
+            <div class="kiosk-room-grid" id="kiosk-setup-room-grid">
+                <button class="kiosk-room-btn" data-room-id="1" data-building="CC">CC 101</button>
+                <button class="kiosk-room-btn" data-room-id="2" data-building="CC">CC 102</button>
+                <button class="kiosk-room-btn" data-room-id="3" data-building="CC">CC 103</button>
+                <button class="kiosk-room-btn" data-room-id="4" data-building="CC">CC 210</button>
+                <button class="kiosk-room-btn" data-room-id="5" data-building="ILC">ILC 214</button>
+                <button class="kiosk-room-btn" data-room-id="6" data-building="ILC">ILC 305</button>
+                <button class="kiosk-room-btn" data-room-id="7" data-building="ILC">ILC 320</button>
+                <button class="kiosk-room-btn" data-room-id="8" data-building="AG">AG 302</button>
+                <button class="kiosk-room-btn" data-room-id="9" data-building="AG">AG 303</button>
+                <button class="kiosk-room-btn" data-room-id="10" data-building="JBK">JBK 118</button>
+                <button class="kiosk-room-btn" data-room-id="11" data-building="JBK">JBK 120</button>
+                <button class="kiosk-room-btn" data-room-id="12" data-building="MMNH">MMNH 105</button>
+                <button class="kiosk-room-btn" data-room-id="13" data-building="MMNH">MMNH 106</button>
+                <button class="kiosk-room-btn" data-room-id="14" data-building="BBC">BBC 304</button>
+                <button class="kiosk-room-btn" data-room-id="15" data-building="ECS">ECS 201</button>
+            </div>
+            
+            <div style="text-align: center; opacity: 0.7; font-size: 14px; color: #cfad4c; font-weight: bold; margin-top: 15px;">
+                WTAMU Information Technology Division • Tablet Kiosk Utility
+            </div>
+        </div>
+
+        <!-- 2. Split Screen Active View -->
+        <div id="active-view" class="kiosk-split-screen" style="display: none;">
+            
+            <!-- Left Maroon Panel (Active Event Details & Digital Clock) -->
+            <div class="kiosk-left-panel">
+                <!-- Branding Exit Home Button -->
+                <button class="kiosk-exit-btn" id="kiosk-exit-btn" title="Exit Kiosk Mode">⌂</button>
+
+                <!-- Branding Seal Watermark -->
+                <img class="kiosk-logo-watermark" src="Images/West_Texas_A&M_University_seal.svg.png" alt="WTAMU Seal">
+                
+                <!-- Room Label Header (Supports 5-click hidden reset shortcut) -->
+                <div id="kiosk-room-label" class="kiosk-room-header" title="Click 5 times to re-configure room">Room CC 101</div>
+                
+                <div class="kiosk-current-info">
+                    <div id="kiosk-current-status" style="font-size: 16px; text-transform: uppercase; letter-spacing: 2px; color: #cfad4c; margin-bottom: 10px; font-weight: bold;">Current Event</div>
+                    <div id="kiosk-current-time" class="kiosk-current-time-range">09:30 - 10:45</div>
+                    <div id="kiosk-current-title" class="kiosk-current-title">CIDM-1301 Introduction to CS</div>
+                    <div id="kiosk-current-host" class="kiosk-current-host">Instructor: Dr. Carl Zhang</div>
+                    
+                    <!-- Dynamic Available QR Code Card -->
+                    <div id="kiosk-available-qr-container" style="display: none; margin-top: 25px; justify-content: center; align-items: center; flex-direction: column; gap: 8px;">
+                        <img id="kiosk-available-qr-image" src="" alt="Scan to Book" style="width: 150px; height: 150px; border-radius: 12px; border: 4px solid white; box-shadow: 0 4px 15px rgba(0,0,0,0.25); background: white;">
+                    </div>
+                </div>
+                
+                <!-- Clock and Calendar Footer -->
+                <div class="kiosk-left-footer">
+                    <div class="kiosk-clock">
+                        <span id="kiosk-clock-day" class="kiosk-clock-day">Friday, May 22</span>
+                        <span id="kiosk-clock-time" class="kiosk-clock-time">02:35:29 PM</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Silver Panel (Schedule Agenda & QR Booking Overlay) -->
+            <div class="kiosk-right-panel">
+                
+                <!-- A. Schedule Agenda List View -->
+                <div id="kiosk-schedule-view" class="kiosk-right-content">
+                    <div class="kiosk-next-header">Next Events</div>
+                    <div id="kiosk-next-list" class="kiosk-next-list">
+                        <!-- Items dynamically generated by kiosk.js -->
+                    </div>
+                    <button id="kiosk-reserve-btn" class="kiosk-reserve-cta">Reserve This Room</button>
+                </div>
+
+                <!-- B. Dynamic QR Code Reservation Overlay (Scan-To-Book) -->
+                <div id="kiosk-qr-view" class="kiosk-qr-panel" style="display: none;">
+                    <div class="kiosk-qr-header">Scan to Reserve</div>
+                    <div class="kiosk-qrcode-container">
+                        <img id="kiosk-qr-image" src="" alt="QR Code Link to Reservation Page">
+                    </div>
+                    <div class="kiosk-qr-instruction">
+                        Scan this QR code with your mobile device to book <strong><span id="kiosk-qr-room-name">CC 101</span></strong> instantly.
+                    </div>
+                    <div class="kiosk-qr-actions">
+                        <button id="kiosk-preview-btn" class="kiosk-qr-btn secondary">Preview Your Event</button>
+                        <button id="kiosk-done-btn" class="kiosk-qr-btn primary">Done!</button>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+</html>
